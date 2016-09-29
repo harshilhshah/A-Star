@@ -19,6 +19,8 @@ public class Grid {
 	final public static short cols = 160;
 	final public static short region_width = 31;
 	final public static short region_height = 31;
+	final public static short screen_width = 1000;
+	final public static short screen_height = 800;
 	
 	private Box[][] grid = new Box[rows][cols];
 
@@ -28,8 +30,8 @@ public class Grid {
 
     public Grid() {
     	
-    	short colWidth = 1000 / cols;
-        short rowHeight = 800 / rows;
+    	short colWidth = screen_width / cols;
+        short rowHeight = screen_height / rows;
 
         for (int row = 0; row < rows; row++) {
         	for (int col = 0; col < cols; col++) {
@@ -44,7 +46,7 @@ public class Grid {
         	int bottom = (p.getY() + (region_height / 2) > rows) ? rows : p.getY() + region_height / 2;
         	for(int a = top; a < bottom; a++){
         		for(int b = left; b < right; b++)
-        			grid[a][b].terrain = Utility.rand.nextBoolean() ? Terrain.BLOCKED_CELL : Terrain.UNBLOCKED_CELL;
+        			grid[a][b].terrain = Utility.randomBoolean() ? Terrain.BLOCKED_CELL : Terrain.UNBLOCKED_CELL;
         	}
         }
         
@@ -87,7 +89,7 @@ public class Grid {
 
         @Override
         public Dimension getPreferredSize() {
-        	return new Dimension(1000, 1000);
+        	return new Dimension(screen_height, screen_width);
         }
 
         @Override

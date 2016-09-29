@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class Utility{
 	
-	public static Random rand = new Random();
-	
 	public static ArrayList<Point> generateRandomPoints(int numOfPoints){
+		
+		Random rand = new Random();
 		
 		ArrayList<Point> points = new ArrayList<>(numOfPoints);
 		
@@ -19,7 +19,23 @@ public class Utility{
 		
 	}
 	
+	public static boolean randomBoolean(){
+		Random rand = new Random();
+		return rand.nextBoolean();
+	}
+	
+	public static void readFile(String filepath){
+		
+	}
+	
+	public static void writeFile(String filepath){
+		
+	}
+	
 	private static Point generateRandomPoint(final Random r){
 		return new Point(r.nextInt(Grid.cols),r.nextInt(Grid.rows));
 	}
+	
+	
+	
 }
