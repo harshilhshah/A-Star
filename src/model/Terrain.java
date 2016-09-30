@@ -1,4 +1,4 @@
-package visual;
+package model;
 
 public enum Terrain { 
 	

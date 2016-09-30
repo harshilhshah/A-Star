@@ -1,7 +1,11 @@
-package visual;
+package controller;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import visual.Box;
+import visual.Grid;
+import model.Point;
 
 public class Utility{
 	
@@ -24,8 +28,9 @@ public class Utility{
 		return rand.nextBoolean();
 	}
 	
-	public static void readFile(String filepath){
-		
+	public static Box[][] readFile(String filepath){
+		// Harshil will write code here.
+		return null;
 	}
 	
 	public static void writeFile(String filepath){

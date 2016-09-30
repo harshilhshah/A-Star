@@ -5,13 +5,14 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import model.Point;
+import model.Terrain;
+import controller.Utility;
 
 public class Grid {
 	
@@ -22,24 +23,30 @@ public class Grid {
 	final public static short screen_width = 1000;
 	final public static short screen_height = 800;
 	
-	private Box[][] grid = new Box[rows][cols];
-
-    public static void main(String[] args) {
-        new Grid();
-    }
+	private Box[][] grid;
 
     public Grid() {
     	
+    	grid = new Box[rows][cols];
     	short colWidth = screen_width / cols;
         short rowHeight = screen_height / rows;
 
-        for (int row = 0; row < rows; row++) {
-        	for (int col = 0; col < cols; col++) {
+        for (int row = 0; row < rows; row++) 
+        	for (int col = 0; col < cols; col++) 
         		grid[row][col] = new Box(colWidth * col, rowHeight * row, colWidth, rowHeight);
-        	}
-        }
         
-        for(visual.Point p: Utility.generateRandomPoints(8)){
+    	generateRegions();
+    	generateMap();
+    }
+    
+    public Grid(Box[][] grid){
+    	this.grid = grid;
+    	generateRegions();
+    	generateMap();
+    }
+    
+    public void generateRegions(){
+    	for(Point p: Utility.generateRandomPoints(8)){
         	int left = (p.getX() < region_width / 2) ? 0 : p.getX() - region_width / 2;
         	int right = (p.getX() + (region_width / 2) > cols) ? cols : p.getX() + region_width / 2;
         	int top = (p.getY() < region_height / 2) ? 0 : p.getY() - region_height / 2;
@@ -49,8 +56,10 @@ public class Grid {
         			grid[a][b].terrain = Utility.randomBoolean() ? Terrain.BLOCKED_CELL : Terrain.UNBLOCKED_CELL;
         	}
         }
-        
-        EventQueue.invokeLater(new Runnable() {
+    }
+    
+    public void generateMap(){
+    	EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -66,7 +75,6 @@ public class Grid {
                 frame.setVisible(true);
             }
         });
-        
     }
 
     public class PaintPane extends JPanel {
@@ -122,45 +130,3 @@ public class Grid {
 
 }
 
-class Box extends Rectangle implements MouseListener{
-
-	int col, row = 0;
-	boolean isSelected = false;
-	Terrain terrain = Terrain.UNBLOCKED_CELL;
-	
-	Box(int c, int r, int cellWidth, int cellHeight){
-		super(c,r,cellWidth,cellHeight);
-		col = c;
-		row = r;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		isSelected = true;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-}
