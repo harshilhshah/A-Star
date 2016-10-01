@@ -26,6 +26,9 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		System.out.println(g.getStartPoint());
+		System.out.println(g.getGoalPoint());
+		
 	//	System.out.println("starting");
    // 	for(Point p: Utility.generateBorderPoints()){
   //  		System.out.println(p.toString());

@@ -27,7 +27,8 @@ public class Grid {
 	final public static short screen_height = 800;
 	
 	private Box[][] grid;
-	private Point[] SstartSgoal = new Point[2];
+	private Point startPoint;
+	private Point goalPoint;
 	private Point[] difficultTerrain = new Point[8];
 	
 
@@ -235,11 +236,7 @@ public class Grid {
     }
     
     public void generateStartAndGoal(){
-    	
-    	int run = 0;
-    	Point start = null;
-    	Point goal = null;
-    	while(run != 2){
+    	for(int run = 0; run != 2; run++){
 	    	Direction topBottom = Utility.randomBoolean()? Direction.UP : Direction.DOWN;
 	    	Direction leftRight = Utility.randomBoolean()? Direction.LEFT : Direction.RIGHT;
 	    	Direction decision = Utility.randomBoolean()? topBottom : leftRight;
@@ -287,14 +284,11 @@ public class Grid {
 	    			}
 	    		}    		
 	    	}
-	    	run++;
 	    	if(run == 1)
-	    		start = chosen;
+	    		startPoint = chosen;
 	    	else if(run == 2)
-	    		goal = chosen;
+	    		goalPoint = chosen;
     	}
-    	SstartSgoal[0] = start;
-    	SstartSgoal[1] = goal;
     }
     
     public void generateMap(){
@@ -373,6 +367,14 @@ public class Grid {
         	}
         }
 
+    }
+    
+    public Point getStartPoint(){
+    	return startPoint;
+    }
+    
+    public Point getGoalPoint(){
+    	return goalPoint;
     }
     
     @Override
