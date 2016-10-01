@@ -1,35 +1,27 @@
 package visual;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Random;
+import java.io.IOException;
 
 import controller.Utility;
-import model.Point;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Grid g = new Grid();
-		PrintWriter writer;
+		
+		Grid g;
+		System.out.println("Reading");
 		try {
-			writer = new PrintWriter("map.txt", "UTF-8");
-			for(String s: g.toString().split("\n")){
-				writer.println(s);
-			}
-			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			g = new Grid(Utility.readFile("map.txt"));
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return;
 		}
 		
-		System.out.println("Start:"+g.getStartPoint());
-		System.out.println("Goal:"+g.getGoalPoint());
-		System.out.println("Difficult Terrain:");
-		System.out.println(g.printDiffictTerrain());
+		//Utility.writeFile("map.txt",g.toString());
+		System.out.println(g.getStartPoint());
+		System.out.println(g.getGoalPoint());
 		
 	//	System.out.println("starting");
    // 	for(Point p: Utility.generateBorderPoints()){

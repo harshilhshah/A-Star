@@ -40,7 +40,7 @@ public class Grid {
 
         for (int row = 0; row < rows; row++) 
         	for (int col = 0; col < cols; col++) 
-        		grid[row][col] = new Box(colWidth * col, rowHeight * row, colWidth, rowHeight);
+        		grid[row][col] = new Box(col, row, colWidth, rowHeight);
         
     	generateRegions();
     	generateHighways();
@@ -51,9 +51,6 @@ public class Grid {
     
     public Grid(Box[][] grid){
     	this.grid = grid;
-    	generateRegions();
-    	generateHighways();
-    	generateBlockedCells();
     	generateStartAndGoal();
     	generateMap();
     }
@@ -69,7 +66,7 @@ public class Grid {
         	int bottom = (p.getY() + (region_height / 2) > rows) ? rows : p.getY() + region_height / 2;
         	for(int a = top; a < bottom; a++)
         		for(int b = left; b < right; b++)
-        			grid[a][b].terrain = Utility.randomBoolean() ? Terrain.PARTIALLY_BLOCKED_CELL : Terrain.UNBLOCKED_CELL;
+        			grid[a][b].setTerrain(Utility.randomBoolean() ? Terrain.PARTIALLY_BLOCKED_CELL : Terrain.UNBLOCKED_CELL);
         }
     }
     
@@ -188,7 +185,7 @@ public class Grid {
     		itterations++;
     		for(int i = 0; i < visitedPoints.size(); i++){
     			Point po = visitedPoints.get(i);
-    			grid[po.getY()][po.getX()].highway_index = itterations;
+    			grid[po.getY()][po.getX()].setHighway_index(itterations);
     		}
     		visitedPoints.clear();
     		restart = true;
@@ -197,10 +194,10 @@ public class Grid {
     	//System.out.println("Leaving highways");
     	for(int j = 0; j < overallVisitedPoints.size(); j++){
     		Point current = overallVisitedPoints.get(j);
-    		if(grid[current.getY()][current.getX()].terrain == Terrain.PARTIALLY_BLOCKED_CELL)
-    			grid[current.getY()][current.getX()].terrain = Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL;
+    		if(grid[current.getY()][current.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL)
+    			grid[current.getY()][current.getX()].setTerrain(Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL);
     		else 
-    			grid[current.getY()][current.getX()].terrain = Terrain.UNBLOCKED_HIGHWAY_CELL;
+    			grid[current.getY()][current.getX()].setTerrain(Terrain.UNBLOCKED_HIGHWAY_CELL);
     	}
     	//System.out.println("overall:"+overallVisitedPoints.toString());
     	//System.out.println("Starting:"+startingPoints.toString());
@@ -216,7 +213,7 @@ public class Grid {
     	
     	for(int i = 0; i < numToGenerate; i++){
     		current = new Point(random.nextInt(Grid.cols),random.nextInt(Grid.rows));
-    		if(grid[current.getY()][current.getX()].terrain == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || grid[current.getY()][current.getX()].terrain == Terrain.UNBLOCKED_HIGHWAY_CELL){
+    		if(grid[current.getY()][current.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || grid[current.getY()][current.getX()].getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL){
     			i--;
     			continue;
     		}
@@ -230,7 +227,7 @@ public class Grid {
     	
     	for(int j = 0; j < numToGenerate; j++){
     		Point blocked = blockedList.get(j);
-    		grid[blocked.getY()][blocked.getX()].terrain = Terrain.BLOCKED_CELL;
+    		grid[blocked.getY()][blocked.getX()].setTerrain(Terrain.BLOCKED_CELL);
     	}
     	
     }
@@ -249,7 +246,7 @@ public class Grid {
 	    				possiblePoints.add(new Point(j,i));
 	    		while(!done){
 	    			chosen = Utility.generateRandomPointInRange(possiblePoints);
-	    			if(grid[chosen.getY()][chosen.getX()].terrain == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].terrain == Terrain.PARTIALLY_BLOCKED_CELL){
+	    			if(grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL){
 	    				done = true;
 	    			}
 	    		}
@@ -259,7 +256,7 @@ public class Grid {
 	    				possiblePoints.add(new Point(j,i));
 	    		while(!done){
 	    			chosen = Utility.generateRandomPointInRange(possiblePoints);
-	    			if(grid[chosen.getY()][chosen.getX()].terrain == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].terrain == Terrain.PARTIALLY_BLOCKED_CELL){
+	    			if(grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL){
 	    				done = true;
 	    			}
 	    		}    		
@@ -269,7 +266,7 @@ public class Grid {
 	    				possiblePoints.add(new Point(j,i));
 	    		while(!done){
 	    			chosen = Utility.generateRandomPointInRange(possiblePoints);
-	    			if(grid[chosen.getY()][chosen.getX()].terrain == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].terrain == Terrain.PARTIALLY_BLOCKED_CELL){
+	    			if(grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL){
 	    				done = true;
 	    			}
 	    		}    		
@@ -279,7 +276,7 @@ public class Grid {
 	    				possiblePoints.add(new Point(j,i));
 	    		while(!done){
 	    			chosen = Utility.generateRandomPointInRange(possiblePoints);
-	    			if(grid[chosen.getY()][chosen.getX()].terrain == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].terrain == Terrain.PARTIALLY_BLOCKED_CELL){
+	    			if(grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.UNBLOCKED_CELL || grid[chosen.getY()][chosen.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL){
 	    				done = true;
 	    			}
 	    		}    		
@@ -346,10 +343,7 @@ public class Grid {
         		for (Box cell : cellArr) {
         			g2d.setColor(Color.DARK_GRAY);
         			g2d.draw(cell);
-        			if(cell.isSelected){
-        				g2d.setColor(Color.RED);
-        			}
-        			switch(cell.terrain){
+        			switch(cell.getTerrain()){
         				case BLOCKED_CELL:
         					g2d.setColor(Color.BLACK);
         					break;
