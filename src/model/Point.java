@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Point {
 	
 	private short x;
@@ -24,6 +26,28 @@ public class Point {
 
 	public void setY(int y) {
 		this.y = (short)y;
+	}
+	
+	public boolean existIn(ArrayList<Point> points){
+		boolean result = true;
+		for(int i = 0; i < points.size(); i++){
+			if(this.equals(points.get(i)))
+				return result;
+		}
+		return false;
+	}
+	
+	public boolean equals(Point otherPoint){
+		boolean result = false;
+		if(otherPoint == null)
+			result = false;
+		else if(x == otherPoint.getX() && y == otherPoint.getY())
+			result = true;
+		return result;
+	}
+	
+	public String toString(){
+		return "("+x+","+y+")";
 	}
 
 }
