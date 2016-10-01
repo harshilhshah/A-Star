@@ -1,5 +1,8 @@
 package visual;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,7 +14,18 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Grid g = new Grid();
-		System.out.println(g.toString());
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("map.txt", "UTF-8");
+			for(String s: g.toString().split("\n")){
+				writer.println(s);
+			}
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	//	System.out.println("starting");
    // 	for(Point p: Utility.generateBorderPoints()){
   //  		System.out.println(p.toString());

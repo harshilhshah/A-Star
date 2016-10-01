@@ -15,11 +15,17 @@ public class Box extends Rectangle implements MouseListener{
 	int col, row = 0;
 	boolean isSelected = false;
 	Terrain terrain = Terrain.UNBLOCKED_CELL;
+	int highway_index = 0;
 	
 	Box(int c, int r, int cellWidth, int cellHeight){
 		super(c,r,cellWidth,cellHeight);
 		col = c;
 		row = r;
+	}
+	
+	@Override
+	public String toString(){
+		return (terrain == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || terrain == Terrain.UNBLOCKED_HIGHWAY_CELL) ? terrain.toString() + highway_index : terrain.toString();
 	}
 
 	@Override

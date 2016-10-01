@@ -53,28 +53,27 @@ public class Grid {
     	generateRegions();
     	generateHighways();
     	generateBlockedCells();
+    	generateStartAndGoal();
     	generateMap();
     }
     
     public void generateRegions(){
     	ArrayList<Point> points = Utility.generateRandomPoints(8);
-    	int i = 0;
-    	for(Point p = points.get(i); i < 8 ; i++){ //possibility of going out of bounds?
+    	for(int i = 0; i < 8 ; i++){ //possibility of going out of bounds?
+    		Point p = points.get(i);
     		difficultTerrain[i] = p;
         	int left = (p.getX() < region_width / 2) ? 0 : p.getX() - region_width / 2;
         	int right = (p.getX() + (region_width / 2) > cols) ? cols : p.getX() + region_width / 2;
         	int top = (p.getY() < region_height / 2) ? 0 : p.getY() - region_height / 2;
         	int bottom = (p.getY() + (region_height / 2) > rows) ? rows : p.getY() + region_height / 2;
-        	for(int a = top; a < bottom; a++){
+        	for(int a = top; a < bottom; a++)
         		for(int b = left; b < right; b++)
         			grid[a][b].terrain = Utility.randomBoolean() ? Terrain.PARTIALLY_BLOCKED_CELL : Terrain.UNBLOCKED_CELL;
-        	}
-        	p = points.get(i);
         }
     }
     
     public void generateHighways(){
-    	System.out.println("Entering highways");
+    	//System.out.println("Entering highways");
     	ArrayList<Point> borderPoints = Utility.generateBorderPoints();
     	ArrayList<Point> startingPoints = new ArrayList<Point>(4);
     	ArrayList<Point> visitedPoints = new ArrayList<Point>();
@@ -185,12 +184,16 @@ public class Grid {
     				continue;
     		}
     		overallVisitedPoints.addAll(visitedPoints);
-    		visitedPoints.clear();
     		itterations++;
+    		for(int i = 0; i < visitedPoints.size(); i++){
+    			Point po = visitedPoints.get(i);
+    			grid[po.getY()][po.getX()].highway_index = itterations;
+    		}
+    		visitedPoints.clear();
     		restart = true;
     		done = false;
     	}
-    	System.out.println("Leaving highways");
+    	//System.out.println("Leaving highways");
     	for(int j = 0; j < overallVisitedPoints.size(); j++){
     		Point current = overallVisitedPoints.get(j);
     		if(grid[current.getY()][current.getX()].terrain == Terrain.PARTIALLY_BLOCKED_CELL)
@@ -198,8 +201,8 @@ public class Grid {
     		else 
     			grid[current.getY()][current.getX()].terrain = Terrain.UNBLOCKED_HIGHWAY_CELL;
     	}
-    	System.out.println("overall:"+overallVisitedPoints.toString());
-    	System.out.println("Starting:"+startingPoints.toString());
+    	//System.out.println("overall:"+overallVisitedPoints.toString());
+    	//System.out.println("Starting:"+startingPoints.toString());
     }
     
     public void generateBlockedCells(){
@@ -369,18 +372,22 @@ public class Grid {
         		}
         	}
         }
-        
-  /*      public String toString(){
-        	String finished = "Start:" + SstartSgoal[0]+ \n +"";
-        	System.out.println("Start:" + SstartSgoal[0]);
-        	System.out.println("Goal:" + SstartSgoal[1]);
-        	for(int i = 0; i < 8; i++){
-        		System.out.println("Difficult Terrain: " + difficultTerrain[i]);
-        	}
-        	return "finished";
-        } */
 
     }
+    
+    @Override
+    public String toString(){
+    	String ret = "";
+    	ret += String.valueOf(rows) + "," + String.valueOf(cols) + "\n";
+    	for(short i = 0; i < rows; i++){
+    		for(short j = 0; j < cols; j++){
+    			ret += grid[i][j].toString();
+    			if(j < cols - 1) ret += ",";
+    		}
+    		ret += "\n";
+    	}
+    	return ret;
+    } 
 
 }
 

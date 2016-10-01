@@ -10,14 +10,14 @@ import model.Point;
 
 public class Utility{
 	
+	public static final Random random = new Random();
+	
 	public static ArrayList<Point> generateRandomPoints(int numOfPoints){
-		
-		Random rand = new Random();
 		
 		ArrayList<Point> points = new ArrayList<>(numOfPoints);
 		
 		for(int i = 0; i < numOfPoints; i++){
-			Point randPoint = generateRandomPoint(rand);
+			Point randPoint = generateRandomPoint();
 			if(!randPoint.existIn(points))
 				points.add(randPoint);
 			else
@@ -32,29 +32,25 @@ public class Utility{
 		
 		ArrayList<Point> points = new ArrayList<>(552);
 		
-		for(int i = 1; i <= Grid.cols-2; i++)	//top layer stagnant row, move col
+		for(int i = 1; i < Grid.cols-1; i++)	//top layer stagnant row, move col
 			points.add(new Point(i,0));
-		for(int j = 1; j <= Grid.cols-2; j++)	//bottom layer stagnant row, move col
+		for(int j = 1; j < Grid.cols-1; j++)	//bottom layer stagnant row, move col
 			points.add(new Point(j,Grid.rows-1)); 
-		for(int k = 1; k <= Grid.rows-2; k++)	//left layer move row, stagnant col
+		for(int k = 1; k < Grid.rows-1; k++)	//left layer move row, stagnant col
 			points.add(new Point(0,k)); 
-		for(int l = 1; l <= Grid.rows-2; l++)	//right layer move row, stagnant col
+		for(int l = 1; l < Grid.rows-1; l++)	//right layer move row, stagnant col
 			points.add(new Point(Grid.cols-1,l)); 
 		
 		return points;
 	}
 	
 	public static Point generateRandomPointInRange(ArrayList<Point> points){
-		
-		Random rand = new Random();
-		rand.nextInt(points.size());
-		return points.get(rand.nextInt(points.size()));
+		return points.get(random.nextInt(points.size()));
 	}
 	
 	public static Direction chooseNextDirection(Direction direction){
-		
-		Random rand = new Random();
-		int val = rand.nextInt(100);
+
+		int val = random.nextInt(100);
 		if(direction == Direction.UP){
 			if(val < 21)
 				direction = Direction.LEFT;
@@ -90,8 +86,7 @@ public class Utility{
 	}
 	
 	public static boolean randomBoolean(){
-		Random rand = new Random();
-		return rand.nextBoolean();
+		return random.nextBoolean();
 	}
 	
 	public static Box[][] readFile(String filepath){
@@ -103,8 +98,8 @@ public class Utility{
 		
 	}
 	
-	private static Point generateRandomPoint(final Random r){
-		return new Point(r.nextInt(Grid.cols),r.nextInt(Grid.rows));
+	private static Point generateRandomPoint(){
+		return new Point(random.nextInt(Grid.cols),random.nextInt(Grid.rows));
 	}
 	
 	

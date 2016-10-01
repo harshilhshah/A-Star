@@ -38,12 +38,7 @@ public class Point {
 	}
 	
 	public boolean equals(Point otherPoint){
-		boolean result = false;
-		if(otherPoint == null)
-			result = false;
-		else if(x == otherPoint.getX() && y == otherPoint.getY())
-			result = true;
-		return result;
+		return otherPoint != null && x == otherPoint.getX() && y == otherPoint.getY();
 	}
 	
 	public String toString(){
