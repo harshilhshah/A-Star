@@ -26,8 +26,10 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		System.out.println(g.getStartPoint());
-		System.out.println(g.getGoalPoint());
+		System.out.println("Start:"+g.getStartPoint());
+		System.out.println("Goal:"+g.getGoalPoint());
+		System.out.println("Difficult Terrain:");
+		System.out.println(g.printDiffictTerrain());
 		
 	//	System.out.println("starting");
    // 	for(Point p: Utility.generateBorderPoints()){

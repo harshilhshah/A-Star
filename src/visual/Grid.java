@@ -284,10 +284,15 @@ public class Grid {
 	    			}
 	    		}    		
 	    	}
-	    	if(run == 1)
+	    	if(run == 0)
 	    		startPoint = chosen;
-	    	else if(run == 2)
+	    	else if(run == 1){
 	    		goalPoint = chosen;
+	    		int euclideanDistance = (int) Math.sqrt(Math.pow(startPoint.getX() - goalPoint.getX(), 2) + Math.pow(startPoint.getY() - goalPoint.getY(),2));
+	    		System.out.println(euclideanDistance);
+	    		if(euclideanDistance < 100)
+	    			run--;
+	    	}
     	}
     }
     
@@ -375,6 +380,17 @@ public class Grid {
     
     public Point getGoalPoint(){
     	return goalPoint;
+    }
+    
+    public Point[] getDifficultTerrain(){
+    	return  difficultTerrain;
+    }
+    
+    public String printDiffictTerrain(){
+    	String ret = "";
+    	for(short i = 0; i < difficultTerrain.length; i++)
+    		ret += difficultTerrain[i] + "\n";
+    	return ret;
     }
     
     @Override

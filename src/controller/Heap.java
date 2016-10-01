@@ -1,14 +1,15 @@
 package controller;
 
-import model.Node;
+import model.BST;
+//This is a min heap
 
-public class Heap<T> {
-
-	private int size;
-	private Node<T> head;
+public class Heap<T>{
 	
-	public Heap(T item){
-		head = new Node<T>(item,null);
+	private int size;
+	private BST<T> head;
+	
+	public Heap (T item){
+		head = new BST<T>(item,null);
 		size = 0;
 	}
 	
@@ -16,7 +17,7 @@ public class Heap<T> {
 		return size;
 	}
 	
-    public boolean isEmpty() {
-        return size == 0;
-    }
+	public boolean isEmpty(){
+		return size == 0;
+	}
 }
