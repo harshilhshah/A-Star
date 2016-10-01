@@ -12,26 +12,21 @@ public class Box extends Rectangle implements MouseListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int col, row = 0;
-	boolean isSelected = false;
-	Terrain terrain = Terrain.UNBLOCKED_CELL;
-	int highway_index = 0;
-	
-	Box(int c, int r, int cellWidth, int cellHeight){
-		super(c,r,cellWidth,cellHeight);
-		col = c;
-		row = r;
+	private Terrain terrain = Terrain.UNBLOCKED_CELL;
+	private int highway_index = 0;
+
+	public Box(int c, int r, int cellWidth, int cellHeight){
+		super(c * cellWidth,r * cellHeight, cellWidth, cellHeight);
 	}
 	
 	@Override
 	public String toString(){
-		return (terrain == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || terrain == Terrain.UNBLOCKED_HIGHWAY_CELL) ? terrain.toString() + highway_index : terrain.toString();
+		return (getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL) ? getTerrain().toString() + highway_index : getTerrain().toString();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		isSelected = true;
 	}
 
 	@Override
@@ -56,5 +51,21 @@ public class Box extends Rectangle implements MouseListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public void setTerrain(Terrain terrain) {
+		this.terrain = terrain;
+	}
+	
+	public int getHighway_index() {
+		return highway_index;
+	}
+	
+	public void setHighway_index(int highway_index) {
+		this.highway_index = highway_index;
 	}
 }

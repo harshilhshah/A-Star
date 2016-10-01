@@ -1,5 +1,11 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -7,6 +13,7 @@ import visual.Box;
 import visual.Grid;
 import model.Direction;
 import model.Point;
+import model.Terrain;
 
 public class Utility{
 	
@@ -88,14 +95,59 @@ public class Utility{
 	public static boolean randomBoolean(){
 		return random.nextBoolean();
 	}
-	
-	public static Box[][] readFile(String filepath){
-		// Harshil will write code here.
-		return null;
+
+	public static Box[][] readFile(String filepath) throws FileNotFoundException, IOException{
+		BufferedReader br = new BufferedReader(new FileReader(filepath));
+		String line = br.readLine();
+		String[] dimensions = line.split(",");
+		short rows = (short) Integer.parseInt(dimensions[0]);
+		short cols = (short) Integer.parseInt(dimensions[1]);
+		Box[][] grid = new Box[rows][cols];
+		int i = 0;
+
+		while ((line = br.readLine()) != null) {
+			int j = 0;
+			for(String s: line.split(",")){	
+				grid[i][j] = new Box(j, i, Grid.screen_width/cols, Grid.screen_height/rows);
+				switch(s.charAt(0)){
+				case '0':
+					grid[i][j].setTerrain(Terrain.BLOCKED_CELL);
+					break;
+				case '1':
+					grid[i][j].setTerrain(Terrain.UNBLOCKED_CELL);
+					break;
+				case '2':
+					grid[i][j].setTerrain(Terrain.PARTIALLY_BLOCKED_CELL);
+					break;
+				case 'a':
+					grid[i][j].setTerrain(Terrain.UNBLOCKED_HIGHWAY_CELL);	
+					grid[i][j].setHighway_index(Integer.parseInt(s.substring(1)));
+					break;
+				case 'b':
+					grid[i][j].setTerrain(Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL);
+					grid[i][j].setHighway_index(Integer.parseInt(s.substring(1)));
+					break;
+				default:
+					break;		
+				}
+				j++;
+			}
+			i++;
+		}
+		return grid;
 	}
 	
-	public static void writeFile(String filepath){
-		
+	public static void writeFile(String filename, String bigString){
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(filename, "UTF-8");
+			for(String s: bigString.split("\n")){
+				writer.println(s);
+			}
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static Point generateRandomPoint(){
