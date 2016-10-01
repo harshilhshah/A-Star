@@ -286,7 +286,7 @@ public class Grid {
 	    	else if(run == 1){
 	    		goalPoint = chosen;
 	    		int euclideanDistance = (int) Math.sqrt(Math.pow(startPoint.getX() - goalPoint.getX(), 2) + Math.pow(startPoint.getY() - goalPoint.getY(),2));
-	    		System.out.println(euclideanDistance);
+//	    		System.out.println(euclideanDistance);
 	    		if(euclideanDistance < 100)
 	    			run--;
 	    	}

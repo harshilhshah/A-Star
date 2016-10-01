@@ -22,6 +22,7 @@ public class Main {
 		//Utility.writeFile("map.txt",g.toString());
 		System.out.println(g.getStartPoint());
 		System.out.println(g.getGoalPoint());
+		System.out.println(g.printDiffictTerrain());
 		
 	//	System.out.println("starting");
    // 	for(Point p: Utility.generateBorderPoints()){
