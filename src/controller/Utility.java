@@ -92,6 +92,10 @@ public class Utility{
 		return direction;
 	}
 	
+	public static double getDistance(Point p1, Point p2){
+		return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(),2));
+	}
+	
 	public static boolean randomBoolean(){
 		return random.nextBoolean();
 	}
@@ -134,22 +138,19 @@ public class Utility{
 			}
 			i++;
 		}
+		br.close();
 		return grid;
 	}
-	
-	public static void writeFile(String filename, String bigString){
+
+	public static void writeFile(String filename, String bigString) throws FileNotFoundException, UnsupportedEncodingException{
 		PrintWriter writer;
-		try {
-			writer = new PrintWriter(filename, "UTF-8");
-			for(String s: bigString.split("\n")){
-				writer.println(s);
-			}
-			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			e.printStackTrace();
+		writer = new PrintWriter(filename, "UTF-8");
+		for(String s: bigString.split("\n")){
+			writer.println(s);
 		}
+		writer.close();
 	}
-	
+
 	private static Point generateRandomPoint(){
 		return new Point(random.nextInt(Grid.cols),random.nextInt(Grid.rows));
 	}

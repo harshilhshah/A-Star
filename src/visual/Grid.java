@@ -2,22 +2,26 @@ package visual;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 import model.Direction;
+import model.Node;
 import model.Point;
 import model.Terrain;
+import controller.BST;
+import controller.Heap;
 import controller.Utility;
 
-public class Grid {
+public class Grid extends JFrame{
 	
 	final public static short rows = 120;
 	final public static short cols = 160;
@@ -30,6 +34,7 @@ public class Grid {
 	private Point startPoint;
 	private Point goalPoint;
 	private Point[] difficultTerrain = new Point[8];
+	private static PriorityQueue<Box> open;
 	
 
     public Grid() {
@@ -46,13 +51,23 @@ public class Grid {
     	generateHighways();
     	generateBlockedCells();
     	generateStartAndGoal();
-    	generateMap();
+    	setWindowProperties();
     }
     
     public Grid(Box[][] grid){
     	this.grid = grid;
     	generateStartAndGoal();
-    	generateMap();
+    	setWindowProperties();
+    }
+    
+    public ArrayList<Node> runAStart(Point start, Point goal){
+    	ArrayList<Node> path = new ArrayList<Node>();
+    	Node current = new Node();
+    	current.parent = current;
+    	Heap open_list = new Heap(null);
+    	BST closed_list = new BST(null);
+    	open_list.insert(current);
+    	return path;
     }
     
     public void generateRegions(){
@@ -285,7 +300,7 @@ public class Grid {
 	    		startPoint = chosen;
 	    	else if(run == 1){
 	    		goalPoint = chosen;
-	    		int euclideanDistance = (int) Math.sqrt(Math.pow(startPoint.getX() - goalPoint.getX(), 2) + Math.pow(startPoint.getY() - goalPoint.getY(),2));
+	    		int euclideanDistance = (int) Utility.getDistance(startPoint, goalPoint);
 //	    		System.out.println(euclideanDistance);
 	    		if(euclideanDistance < 100)
 	    			run--;
@@ -293,42 +308,26 @@ public class Grid {
     	}
     }
     
-    public void generateMap(){
-    	EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception ex) {
-                }
+    public void aStar(Point start){
+    	open.add(grid[start.getY()][start.getX()]);
+    	
+    }
 
-                JFrame frame = new JFrame("Test");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.add(new PaintPane());
-                frame.pack();
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            }
-        });
+    public void setWindowProperties(){
+    	addWindowListener(new WindowAdapter() {
+    		public void windowClosing(WindowEvent we) {
+    			dispose();
+    		}
+    	});
+    	add(new PaintPane());
+    	pack();
+    	setLocationRelativeTo(null);
+    	setVisible(true);
     }
 
     public class PaintPane extends JPanel {
 
-        public PaintPane() {
-            /*addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    for (Box[] bArr : grid) {
-                    	for(Box b: bArr){
-                    		if (b.contains(e.getPoint())) {
-                    			b.isSelected = true;
-                    		}
-                    	}
-                    }
-                    repaint();
-                }
-            });*/
-        }
+        public PaintPane() {}
 
         @Override
         public Dimension getPreferredSize() {
@@ -341,8 +340,6 @@ public class Grid {
         	Graphics2D g2d = (Graphics2D) g;
         	for(Box[] cellArr: grid){
         		for (Box cell : cellArr) {
-        			g2d.setColor(Color.DARK_GRAY);
-        			g2d.draw(cell);
         			switch(cell.getTerrain()){
         				case BLOCKED_CELL:
         					g2d.setColor(Color.BLACK);
@@ -361,6 +358,8 @@ public class Grid {
         			}
       
         			g2d.fill(cell);
+        			g2d.setColor(Color.DARK_GRAY);
+        			g2d.draw(cell);
 
         		}
         	}
