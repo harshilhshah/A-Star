@@ -13,8 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import model.Direction;
+import model.Node;
 import model.Point;
 import model.Terrain;
+import controller.BST;
+import controller.Heap;
 import controller.Utility;
 
 public class Grid {
@@ -53,6 +56,16 @@ public class Grid {
     	this.grid = grid;
     	generateStartAndGoal();
     	generateMap();
+    }
+    
+    public ArrayList<Node> runAStart(Point start, Point goal){
+    	ArrayList<Node> path = new ArrayList<Node>();
+    	Node current = new Node();
+    	current.parent = current;
+    	Heap open_list = new Heap(null);
+    	BST closed_list = new BST(null);
+    	open_list.insert(current);
+    	return path;
     }
     
     public void generateRegions(){
@@ -285,7 +298,7 @@ public class Grid {
 	    		startPoint = chosen;
 	    	else if(run == 1){
 	    		goalPoint = chosen;
-	    		int euclideanDistance = (int) Math.sqrt(Math.pow(startPoint.getX() - goalPoint.getX(), 2) + Math.pow(startPoint.getY() - goalPoint.getY(),2));
+	    		int euclideanDistance = (int) Utility.getDistance(startPoint, goalPoint);
 //	    		System.out.println(euclideanDistance);
 	    		if(euclideanDistance < 100)
 	    			run--;
@@ -341,8 +354,6 @@ public class Grid {
         	Graphics2D g2d = (Graphics2D) g;
         	for(Box[] cellArr: grid){
         		for (Box cell : cellArr) {
-        			g2d.setColor(Color.DARK_GRAY);
-        			g2d.draw(cell);
         			switch(cell.getTerrain()){
         				case BLOCKED_CELL:
         					g2d.setColor(Color.BLACK);
@@ -361,6 +372,8 @@ public class Grid {
         			}
       
         			g2d.fill(cell);
+        			g2d.setColor(Color.DARK_GRAY);
+        			g2d.draw(cell);
 
         		}
         	}

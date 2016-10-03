@@ -1,16 +1,27 @@
 package controller;
 
-import model.BST;
-//This is a min heap
+import model.Node;
 
-public class Heap<T>{
+public class Heap extends BST{
 	
 	private int size;
-	private BST<T> head;
 	
-	public Heap (T item){
-		head = new BST<T>(item,null);
+	public Heap (Node node){
+		root = node;
 		size = 0;
+	}
+	
+	public void insert(BST bst){
+		
+	}
+	
+	public Node pop(){
+		findNewMin();
+		return root;
+	}
+	
+	private void findNewMin(){
+		
 	}
 	
 	public int getSize(){
