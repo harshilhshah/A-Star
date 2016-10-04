@@ -11,7 +11,9 @@ public class Heap extends BST{
 		size = 0;
 	}
 	
-	public void insert(BST bst){
+	public int insert(Node node){
+		
+		return size;
 		
 	}
 	

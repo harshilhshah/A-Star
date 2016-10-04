@@ -27,6 +27,26 @@ public class Node {
 		return 0.0f;
 	}
 	
+	public int compareTo(Node node){
+		if(this.f_value < node.f_value)
+			return -1;
+		else if(Math.abs(this.f_value - node.f_value) < 0.0001){
+			if(this.g_value < node.g_value)
+				return -1;
+			else if(Math.abs(this.g_value - node.g_value) < 0.0001){
+				if(this.h_value < node.h_value)
+					return -1;
+				else if(Math.abs(this.h_value - node.h_value) < 0.0001)
+					return 0;
+				else
+					return 1;
+			}else{
+				return 1;
+			}
+		}else
+			return 1;
+	}
+	
 	public String toString() {
 		return String.valueOf(f_value);
 	}
