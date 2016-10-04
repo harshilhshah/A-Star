@@ -5,7 +5,7 @@ public class Node {
 	public Node left;
 	public Node right;
 	public Node parent;
-	public Point point;
+	private Point point;
 	public double f_value, g_value, h_value;
 	
 	public Node(){
@@ -21,6 +21,10 @@ public class Node {
 	public Node( Node left, Node right, Node parent) {
 	
 //		this.next = next;
+	}
+	
+	public Point getPoint(){
+		return point;
 	}
 	
 	public float getF_value(){

@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.PriorityQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,6 +34,7 @@ public class Grid extends JFrame{
 	private Box[][] grid;
 	private Point startPoint;
 	private Point goalPoint;
+	private ArrayList<Node> aStarSolution;
 	private Point[] difficultTerrain = new Point[8];
 	private static PriorityQueue<Box> open;
 	
@@ -60,14 +62,22 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
-    public ArrayList<Node> runAStart(Point start, Point goal){
+    public void runAStart(Point start, Point goal){
     	ArrayList<Node> path = new ArrayList<Node>();
     	Node current = new Node();
     	current.parent = current;
-    	Heap open_list = new Heap(null);
+    	PriorityQueue open_list = new PriorityQueue();
     	BST closed_list = new BST(null);
     	open_list.insert(current);
-    	return path;
+    	while(!open_list.isEmpty()){
+    		Node curr = open_list.poll();
+    		if(curr.getPoint().equals(goalPoint)){
+    			path.add(curr);
+    			aStarSolution = path;
+    		}/*Path found!*/
+    		closed_list.insert(curr);
+    	}
+    	
     }
     
     public void generateRegions(){
