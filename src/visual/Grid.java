@@ -68,9 +68,8 @@ public class Grid extends JFrame{
     	ArrayList<Node> path = new ArrayList<Node>();
     	Node current = new Node();
     	current.parent = current;
-    	current.setPoint(startPoint);
-    	NodeComparator NC = new NodeComparator();
-    	PriorityQueue <Node>open_list = new PriorityQueue(NC);
+		NodeComparator NC = new NodeComparator();
+    	PriorityQueue<Node> open_list = new PriorityQueue<Node>(NC);
     	BST closed_list = new BST(null);
     	open_list.add(current);
     	while(!open_list.isEmpty()){
