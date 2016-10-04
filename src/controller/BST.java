@@ -22,6 +22,7 @@ public class BST {
 				if(curr.left == null){
 					curr.left = node;
 					node.parent = curr;
+					return 1;
 				}else{
 					curr = curr.left;
 				}
@@ -29,14 +30,21 @@ public class BST {
 				if(curr.right == null){
 					curr.right = node;
 					node.parent = curr;
+					return 1;
 				}else{
 					curr = curr.right;
 				}
 			}else{
-				
+				if(curr.right == null){
+					curr.right = node;
+					node.parent = curr;
+					return 0;
+				}else{
+					curr = curr.right;
+				}
 			}
 		}
-		return 0;
+		return -1;
 	}
 	public float getF_value(){
 		return 0.0f;
