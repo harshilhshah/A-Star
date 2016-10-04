@@ -20,8 +20,6 @@ import model.Node;
 import model.NodeComparator;
 import model.Point;
 import model.Terrain;
-import controller.BST;
-import controller.Heap;
 import controller.Utility;
 
 public class Grid extends JFrame{
@@ -36,6 +34,7 @@ public class Grid extends JFrame{
 	private Box[][] grid;
 	private Point startPoint;
 	private Point goalPoint;
+	private double totalPathCost;
 	private ArrayList<Node> aStarSolution;
 	private Point[] difficultTerrain = new Point[8];
 	private static PriorityQueue<Box> open;
@@ -64,40 +63,66 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
-    public void runAStar(Point start, Point goal){
-    	ArrayList<Node> path = new ArrayList<Node>();
-    	Node current = new Node();
-    	current.parent = current;
-		NodeComparator NC = new NodeComparator();
+    public void runAStar(){
+    	aStarSolution = new ArrayList<Node>();
+    	NodeComparator NC = new NodeComparator();
     	PriorityQueue<Node> open_list = new PriorityQueue<Node>(NC);
-    	Point[][] closed_list = new = ;
-    	open_list.add(current) 
+    	Node current = new Node(startPoint,0,Utility.getDistance(startPoint, goalPoint));
+    	current.parent = current;
+    	open_list.add(current); 
+    	Point[][] closed_list = new Point[rows][cols];
+    	
     	while(!open_list.isEmpty()){
-    		Node curr = open_list.poll();
+    		Node curr = open_list.remove();
     		if(curr.getPoint().equals(goalPoint)){
-    			path.add(curr);
-    			aStarSolution = path;
+    			aStarSolution.add(curr);;
     			return;
     		}/*Path found!*/
-    		closed_list.insert(curr);
-    		//Find 8 surrounding neighbors
-    	//	Point
     		int cx = current.getPoint().getX();
     		int cy = current.getPoint().getY();
+    		closed_list[cy][cx] = curr.getPoint();
+    		System.out.println(curr);
+    		aStarSolution.add(curr);
+    		//Find 8 surrounding neighbors
     		for(Neighbor n: Neighbor.neighnbors){
-    			if(cx+n.getXChange() < 0 || cx+n.getXChange() > cols || cy+n.getYChange() < 0 || cy+n.getYChange() > rows)
+    			if(cx+n.getXChange() < 0 || cx+n.getXChange() >= cols || cy+n.getYChange() < 0 || cy+n.getYChange() >= rows)
     				continue;
-    			else if(grid[cy+n.getYChange()][cy+n.getYChange()].getTerrain() == Terrain.BLOCKED_CELL)
+    			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL)
     				continue;
-    			else if(closed_list.contains(new Node(null, new Point(cx+n.getXChange(),cx+n.getYChange())))
-    					continue;
+    			else if(closed_list[cy+n.getYChange()][cx+n.getXChange()] != null)
+    				continue;
     			else{
-    				open_list.add(new Node(null, new Point(cx+n.getXChange(),cx+n.getYChange())));
-    				updateVertex()
+    				Node sPrime = new Node(new Point(cx+n.getXChange(),cy+n.getYChange()));
+    				if(!open_list.contains(sPrime)){
+    					sPrime.setG_value(Integer.MAX_VALUE); 
+    					sPrime.parent = null;
+    				}
+    				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); //TODO: fix this
+    				updateVertex(current, sPrime, cost, open_list);
     			}
     		}
     	}
     	
+    	Node prev = aStarSolution.get(0);
+    	this.getGraphics().setColor(Color.MAGENTA);
+    	for(Node no: aStarSolution){
+    		this.getGraphics().drawLine(prev.getPoint().getY(), prev.getPoint().getX(), no.getPoint().getY(), no.getPoint().getX());
+    		prev = no;
+    	}
+    	
+    }
+    
+    public void updateVertex(Node s, Node sPrime, double cost, PriorityQueue<Node> open_list){
+    	if(s.getG_value() + cost < sPrime.getG_value()){
+    		sPrime.setG_value(s.getG_value() + cost);
+    		sPrime.parent = s;
+    		sPrime.setH_value(Utility.getDistance(startPoint, sPrime.getPoint()));
+    		sPrime.setF_value(s.getG_value() + s.getH_value());
+    		if(open_list.contains(sPrime)){
+    			open_list.remove(sPrime);
+    		}
+    		open_list.add(sPrime);
+    	}
     }
     
     public void generateRegions(){
@@ -337,11 +362,6 @@ public class Grid extends JFrame{
 	    	}
     	}
     }
-    
-    public void aStar(Point start){
-    	open.add(grid[start.getY()][start.getX()]);
-    	
-    }
 
     public void setWindowProperties(){
     	addWindowListener(new WindowAdapter() {
@@ -375,7 +395,7 @@ public class Grid extends JFrame{
         					g2d.setColor(Color.BLACK);
         					break;
         				case PARTIALLY_BLOCKED_CELL:
-        					g2d.setColor(Color.ORANGE);
+        					g2d.setColor(Color.GRAY);
         					break;
         				case UNBLOCKED_HIGHWAY_CELL:
         					g2d.setColor(Color.BLUE);
@@ -384,7 +404,7 @@ public class Grid extends JFrame{
         					g2d.setColor(Color.GREEN);
         					break;
         				default:
-        					g2d.setColor(Color.CYAN);
+        					g2d.setColor(Color.WHITE);
         			}
       
         			g2d.fill(cell);
@@ -413,6 +433,14 @@ public class Grid extends JFrame{
     	String ret = "";
     	for(short i = 0; i < difficultTerrain.length; i++)
     		ret += difficultTerrain[i] + "\n";
+    	return ret;
+    }
+    
+    public String getPathTaken(){
+    	String ret = "";
+    	ret += totalPathCost + "\n";
+    	for(Node node: aStarSolution)
+    		ret += node.toString() + "\n";
     	return ret;
     }
     

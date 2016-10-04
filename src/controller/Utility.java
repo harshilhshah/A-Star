@@ -99,6 +99,24 @@ public class Utility{
 	public static boolean randomBoolean(){
 		return random.nextBoolean();
 	}
+	
+	public static double getCost(Box start, Box end, boolean isDiagonal){
+		if(start.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL)
+				return isDiagonal ? Math.sqrt(2) : 0.25;
+		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL)
+				return isDiagonal ? Math.sqrt(2) : 0.5;	
+		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL)
+				return isDiagonal ? Math.sqrt(2) : 0.325;
+		if(start.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL)
+				return isDiagonal ? Math.sqrt(2) : 0.325;	
+		if(start.getTerrain() == Terrain.UNBLOCKED_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL)
+				return isDiagonal ? (Math.sqrt(2) + Math.sqrt(8)) / 2 : 1.5;
+		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL && end.getTerrain() == Terrain.UNBLOCKED_CELL)
+				return isDiagonal ? (Math.sqrt(2) + Math.sqrt(8)) / 2 : 1.5;
+		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL)
+				return isDiagonal ? Math.sqrt(8) : 2.0;
+		return isDiagonal ? Math.sqrt(2) : 1.0;
+	}
 
 	public static Box[][] readFile(String filepath) throws FileNotFoundException, IOException{
 		BufferedReader br = new BufferedReader(new FileReader(filepath));

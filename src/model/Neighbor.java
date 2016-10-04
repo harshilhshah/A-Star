@@ -17,4 +17,5 @@ public enum Neighbor{
 	
 	public int getXChange(){ return this.dx; }
 	public int getYChange(){ return this.dy; }
+	public boolean isDiagonal(){ return this == NE || this == NW || this == SE || this == SW; }
 }
