@@ -92,7 +92,7 @@ public class HomeScreen extends Applet implements ActionListener {
 				displayError("Can't find a map to traverse.");
 			}
 			else{
-				g.runAStart(g.getStartPoint(), g.getGoalPoint());
+				g.runAStar(g.getStartPoint(), g.getGoalPoint());
 			}
 		}
 		else if(e.getSource() == writePathBtn){

@@ -20,8 +20,6 @@ import model.Node;
 import model.NodeComparator;
 import model.Point;
 import model.Terrain;
-import controller.BST;
-import controller.Heap;
 import controller.Utility;
 
 public class Grid extends JFrame{
@@ -36,6 +34,7 @@ public class Grid extends JFrame{
 	private Box[][] grid;
 	private Point startPoint;
 	private Point goalPoint;
+	private double totalPathCost;
 	private ArrayList<Node> aStarSolution;
 	private Point[] difficultTerrain = new Point[8];
 	private static PriorityQueue<Box> open;
@@ -410,6 +409,14 @@ public class Grid extends JFrame{
     	String ret = "";
     	for(short i = 0; i < difficultTerrain.length; i++)
     		ret += difficultTerrain[i] + "\n";
+    	return ret;
+    }
+    
+    public String getPathTaken(){
+    	String ret = "";
+    	ret += totalPathCost + "\n";
+    	for(Node n: aStarSolution)
+    		ret += n.toString() + "/n";
     	return ret;
     }
     
