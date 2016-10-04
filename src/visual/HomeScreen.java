@@ -87,6 +87,29 @@ public class HomeScreen extends Applet implements ActionListener {
 				}
 			}
 		}
+		else if(e.getSource() == aStarBtn){
+			if(g == null){
+				displayError("Can't find a map to traverse.");
+			}
+			else{
+				g.runAStart(g.getStartPoint(), g.getGoalPoint());
+			}
+		}
+		else if(e.getSource() == writePathBtn){
+			if(g == null){
+				displayError("No map found.");
+			}else{
+				String s = (String)JOptionPane.showInputDialog(
+						(Component) getAppletContext(),"Enter file name:", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, null, ".txt");
+				try {
+					//TODO: rewrite this line
+					Utility.writeFile(s, g.toString());
+					display("Path saved.");
+				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
+					displayError("Couldn't save the path. Try again.");
+				}
+			}
+		}
 		else if(e.getSource() == exitBtn){
 			System.exit(ABORT);
 		}
@@ -98,7 +121,7 @@ public class HomeScreen extends Applet implements ActionListener {
 	}
 	
 	public void displayError(String s){
-		lbl.setText(s);
+		lbl.setText("ERROR: " + s);
 		lbl.setForeground(Color.RED);
 	}
 	
