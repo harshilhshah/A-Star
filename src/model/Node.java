@@ -2,33 +2,43 @@ package model;
 
 public class Node {
 		
-	public Node left;
-	public Node right;
 	public Node parent;
 	private Point point;
-	public double f_value, g_value, h_value;
+	double f_value;
+	double g_value;
+	double h_value;
 	
 	public Node(){
 		point = null;
 		parent = null;
-		left = null;
-		right = null;
 		f_value = 0.0;
 		g_value = 0.0;
 		h_value = 0.0;
 	}
 	
-	public Node( Node left, Node right, Node parent) {
-	
-//		this.next = next;
+	public Node( Node parent, Point p) {
+		
+		point = p;
 	}
 	
 	public Point getPoint(){
 		return point;
 	}
 	
-	public float getF_value(){
-		return 0.0f;
+	public void setPoint(Point p){
+		this.point = p;
+	}
+	
+	public double getF_value(){
+		return f_value;
+	}
+	
+	public double getG_value(){
+		return g_value;
+	}
+	
+	public double getH_value(){
+		return h_value;
 	}
 	
 	public int compareTo(Node node){
@@ -49,6 +59,10 @@ public class Node {
 			}
 		}else
 			return 1;
+	}
+	
+	public boolean equals(Node other){
+		return (this.compareTo(other) == 0 && this.getPoint().equals(other.getPoint()));
 	}
 	
 	public String toString() {

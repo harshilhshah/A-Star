@@ -5,19 +5,21 @@ import model.Point;
 
 public class BST {
 	
-	public Node root;
+	public BST node;
+	public BST left;
+	public BST right;
 	
 	public BST(){
-		root = null;
+		node = null;
 	}
 	
 	public BST( Node node) {
-		root = node;
+		node = node;
 	}
 	
-	public int insert(Node node){
-		Node curr = null;
-		for(curr = root; curr != null; ){
+	public int insert(BST node){
+		BST curr = null;
+		for(curr = node; curr != null; ){
 			if(curr.compareTo(node) == -1){
 				if(curr.left == null){
 					curr.left = node;
@@ -48,6 +50,26 @@ public class BST {
 	}
 	public float getF_value(){
 		return 0.0f;
+	}
+	
+	public int compareTo(Node node){
+		if(this.f_value < node.f_value)
+			return -1;
+		else if(Math.abs(this.f_value - node.f_value) < 0.0001){
+			if(this.g_value < node.g_value)
+				return -1;
+			else if(Math.abs(this.g_value - node.g_value) < 0.0001){
+				if(this.h_value < node.h_value)
+					return -1;
+				else if(Math.abs(this.h_value - node.h_value) < 0.0001)
+					return 0;
+				else
+					return 1;
+			}else{
+				return 1;
+			}
+		}else
+			return 1;
 	}
 	
 }

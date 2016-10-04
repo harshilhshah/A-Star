@@ -15,7 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.Direction;
+import model.Neighbor;
 import model.Node;
+import model.NodeComparator;
 import model.Point;
 import model.Terrain;
 import controller.BST;
@@ -62,20 +64,36 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
-    public void runAStart(Point start, Point goal){
+    public void runAStar(Point start, Point goal){
     	ArrayList<Node> path = new ArrayList<Node>();
     	Node current = new Node();
     	current.parent = current;
-    	PriorityQueue open_list = new PriorityQueue();
+    	current.setPoint(startPoint);
+    	NodeComparator NC = new NodeComparator();
+    	PriorityQueue <Node>open_list = new PriorityQueue(NC);
     	BST closed_list = new BST(null);
-    	open_list.insert(current);
+    	open_list.add(current);
     	while(!open_list.isEmpty()){
     		Node curr = open_list.poll();
     		if(curr.getPoint().equals(goalPoint)){
     			path.add(curr);
     			aStarSolution = path;
+    			return;
     		}/*Path found!*/
     		closed_list.insert(curr);
+    		//Find 8 surrounding neighbors
+    	//	Point
+    		int cx = current.getPoint().getX();
+    		int cy = current.getPoint().getY();
+    		for(Neighbor n: Neighbor.neighnbors){
+    			if(cx+n.getXChange() < 0 || cx+n.getXChange() > cols || cy+n.getYChange() < 0 || cy+n.getYChange() > rows)
+    				continue;
+    			else if(grid[cy+n.getYChange()][cy+n.getYChange()].getTerrain() == Terrain.BLOCKED_CELL)
+    				continue;
+    			else if(closed_list.contains(new Node(null, new Point(cx+n.getXChange(),cx+n.getYChange())))
+    			else
+    				open_list.add(new Node(null, new Point(cx+n.getXChange(),cx+n.getYChange())));
+    		}
     	}
     	
     }
