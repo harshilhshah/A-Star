@@ -9,17 +9,16 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.PriorityQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.Direction;
 import model.Node;
+import model.NodeComparator;
 import model.Point;
 import model.Terrain;
 import controller.BST;
-import controller.Heap;
 import controller.Utility;
 
 public class Grid extends JFrame{
@@ -34,6 +33,7 @@ public class Grid extends JFrame{
 	private Box[][] grid;
 	private Point startPoint;
 	private Point goalPoint;
+	private double totalAStarCost;
 	private ArrayList<Node> aStarSolution;
 	private Point[] difficultTerrain = new Point[8];
 	private static PriorityQueue<Box> open;
@@ -66,9 +66,10 @@ public class Grid extends JFrame{
     	ArrayList<Node> path = new ArrayList<Node>();
     	Node current = new Node();
     	current.parent = current;
-    	PriorityQueue open_list = new PriorityQueue();
+    	NodeComparator NC = new NodeComparator();
+    	PriorityQueue<Node> open_list = new PriorityQueue<Node>(NC);
     	BST closed_list = new BST(null);
-    	open_list.insert(current);
+    	open_list.add(current);
     	while(!open_list.isEmpty()){
     		Node curr = open_list.poll();
     		if(curr.getPoint().equals(goalPoint)){
@@ -393,6 +394,14 @@ public class Grid extends JFrame{
     	String ret = "";
     	for(short i = 0; i < difficultTerrain.length; i++)
     		ret += difficultTerrain[i] + "\n";
+    	return ret;
+    }
+    
+    public String getPathTaken(){
+    	String ret = "";
+    	ret += totalAStarCost + "\n";
+    	for(Node node: aStarSolution)
+    		ret += node.toString() + "\n";
     	return ret;
     }
     

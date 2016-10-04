@@ -102,8 +102,7 @@ public class HomeScreen extends Applet implements ActionListener {
 				String s = (String)JOptionPane.showInputDialog(
 						(Component) getAppletContext(),"Enter file name:", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, null, ".txt");
 				try {
-					//TODO: rewrite this line
-					Utility.writeFile(s, g.toString());
+					Utility.writeFile(s, g.getPathTaken());
 					display("Path saved.");
 				} catch (FileNotFoundException | UnsupportedEncodingException e1) {
 					displayError("Couldn't save the path. Try again.");
