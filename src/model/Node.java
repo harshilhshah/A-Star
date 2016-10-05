@@ -59,12 +59,8 @@ public class Node {
 	}
 	
 	public int compareTo(Node node){
-		if(this.point.equals(node.point))
-			return 0;
-		if(this.point.getX() > node.getPoint().getX())
-			return 1;
-		else
-			return -1;
+		return getF_value()<node.getF_value()?-1:
+            getF_value()>node.getF_value()?1:0;
 	/*	if(this.f_value < node.f_value)
 			return -1;
 		else if(Math.abs(this.f_value - node.f_value) < 0.0001){

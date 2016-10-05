@@ -28,6 +28,11 @@ public class Box extends Rectangle{
 	public String toString(){
 		return (getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL) ? getTerrain().toString() + highway_index : getTerrain().toString();
 	}
+	
+	@Override
+	public boolean equals(Object b){
+		return i == ((Box)b).i && j == ((Box)b).j;
+	}
 
 	public Terrain getTerrain() {
 		return terrain;

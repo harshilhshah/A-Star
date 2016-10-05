@@ -36,9 +36,14 @@ public class Point {
 		}
 		return false;
 	}
-	
-	public boolean equals(Point otherPoint){
-		return otherPoint != null && x == otherPoint.getX() && y == otherPoint.getY();
+
+	@Override
+	public boolean equals(Object otherPoint){
+		if (otherPoint != null && otherPoint instanceof Point)
+        {
+			return otherPoint != null && x == ((Point) otherPoint).getX() && y == ((Point)otherPoint).getY();
+        }
+		return false;
 	}
 	
 	public String toString(){

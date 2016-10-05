@@ -18,12 +18,13 @@ public class HomeScreen extends Applet implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, exitBtn;
-	JLabel lbl = new JLabel("");
+	static JLabel lbl = new JLabel("");
 	Grid g;
 
 	public void init() {
 		
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.resize(400, 200);
 		
 		newMapBtn = new Button("Create new map");
 		add(newMapBtn);		
@@ -92,6 +93,7 @@ public class HomeScreen extends Applet implements ActionListener {
 				displayError("Can't find a map to traverse.");
 			}
 			else{
+				display("Loading...");
 				g.runAStar();
 			}
 		}
@@ -114,12 +116,12 @@ public class HomeScreen extends Applet implements ActionListener {
 		}
 	}
 	
-	public void display(String s){
+	public static void display(String s){
 		lbl.setText(s);
 		lbl.setForeground(Color.MAGENTA);
 	}
 	
-	public void displayError(String s){
+	public static void displayError(String s){
 		lbl.setText("ERROR: " + s);
 		lbl.setForeground(Color.RED);
 	}
