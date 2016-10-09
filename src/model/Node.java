@@ -3,10 +3,12 @@ package model;
 public class Node {
 		
 	public Node parent;
+	public Node left;
+	public Node right;
 	private Point point;
 	double f_value;
-	double g_value;
-	double h_value;
+	double g_value; /*The distance from the start vertex to vertex s*/
+	double h_value; /*The distance from vertex s to the goal*/
 	
 	public void setF_value(double f_value) {
 		this.f_value = f_value;
@@ -59,8 +61,8 @@ public class Node {
 	}
 	
 	public int compareTo(Node node){
-		return getF_value()<node.getF_value()?-1:
-            getF_value()>node.getF_value()?1:0;
+//		return getF_value()<node.getF_value()?-1:
+//            getF_value()>node.getF_value()?1:0;
 	/*	if(this.f_value < node.f_value)
 			return -1;
 		else if(Math.abs(this.f_value - node.f_value) < 0.0001){
@@ -79,6 +81,19 @@ public class Node {
 		}else
 			return 1;
 			*/
+		if(Math.abs(this.getF_value() - node.getF_value()) < 0.000001){
+			return -1;
+		}else if(Math.abs(this.getF_value() - node.getF_value()) > 0.000001){
+			return 1;
+		}else{ /*The difference between the two is practically zero for our purposes*/
+			if(Math.abs(this.getG_value() - node.getG_value()) < 0.000001){
+				return -1;
+			}else if(Math.abs(this.getG_value() - node.getG_value()) > 0.000001){
+				return 1;
+			}else{
+				return 0;	
+			}
+		}
 	}
 	
 	public boolean equals(Node other){

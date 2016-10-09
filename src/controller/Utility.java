@@ -104,11 +104,11 @@ public class Utility{
 		if(start.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL)
 				return isDiagonal ? Math.sqrt(2) : 0.25;
 		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL)
-				return isDiagonal ? Math.sqrt(2) : 0.5;	
+				return isDiagonal ? Math.sqrt(8) / 4 : 0.5;	
 		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL)
-				return isDiagonal ? Math.sqrt(2) : 0.325;
+				return isDiagonal ? Math.sqrt(3) / 4 : 0.325;
 		if(start.getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL)
-				return isDiagonal ? Math.sqrt(2) : 0.325;	
+				return isDiagonal ? Math.sqrt(3) / 4 : 0.325;	
 		if(start.getTerrain() == Terrain.UNBLOCKED_CELL && end.getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL)
 				return isDiagonal ? (Math.sqrt(2) + Math.sqrt(8)) / 2 : 1.5;
 		if(start.getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL && end.getTerrain() == Terrain.UNBLOCKED_CELL)

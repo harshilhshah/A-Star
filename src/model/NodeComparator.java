@@ -11,9 +11,22 @@ public class NodeComparator implements Comparator<Node>{
 		if(n1.getPoint().getX() > n2.getPoint().getX())
 			return 1;
 		else
-			return -1;*/
+			return -1;
 		return n1.getF_value()<n2.getF_value()?-1:
-            n1.getF_value()>n2.getF_value()?1:0;
+            n1.getF_value()>n2.getF_value()?1:0; */
+		if(Math.abs(n1.getF_value() - n2.getF_value()) < 0.000001){
+			return -1;
+		}else if(Math.abs(n1.getF_value() - n2.getF_value()) > 0.000001){
+			return 1;
+		}else{ /*The difference between the two is practically zero for our purposes*/
+			if(Math.abs(n1.getG_value() - n2.getG_value()) < 0.000001){
+				return -1;
+			}else if(Math.abs(n1.getG_value() - n2.getG_value()) > 0.000001){
+				return 1;
+			}else{
+				return 0;	
+			}
+		}
 	}
 
 }

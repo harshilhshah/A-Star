@@ -72,22 +72,29 @@ public class Grid extends JFrame{
     	
     	while(!open_list.isEmpty()){
     		curr = open_list.poll();
-    		if(curr.getPoint().equals(goalPoint) || i == 20000){
+    		if(curr.getPoint().equals(goalPoint) || i == 200000){
     			aStarNodeSolution.add(curr);;
     			break;
     		}/*Path found!*/
     		int cx = curr.getPoint().getX();
     		int cy = curr.getPoint().getY();
-    		closed_list[cy][cx] = true;
-
+    		closed_list[cy][cx] = true; /*marked that point as visited, added to closed list*/
+    		System.out.println("Current Vertex: " + curr.toString());
+    		
     		//Find 8 surrounding neighbors
     		for(Neighbor n: Neighbor.neighnbors){
-    			if(cx+n.getXChange() < 0 || cx+n.getXChange() >= cols || cy+n.getYChange() < 0 || cy+n.getYChange() >= rows)
+    			if(cx+n.getXChange() < 0 || cx+n.getXChange() >= cols || cy+n.getYChange() < 0 || cy+n.getYChange() >= rows){ /*checking for out of bounds*/
+    				System.out.println("OutOfBounds at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
     				continue;
-    			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL)
+    			}
+    			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL){ /*checking for blocked cells*/
+    				System.out.println("Blocked cell at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
     				continue;
-    			else if(closed_list[cy+n.getYChange()][cx+n.getXChange()])
+    			}
+    			else if(closed_list[cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
+    				System.out.println("Already visited:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) + ")");
     				continue;
+    			}
     			else{
     				Node sPrime = new Node(new Point(cx+n.getXChange(),cy+n.getYChange()));
     				if(!open_list.contains(sPrime)){
@@ -96,6 +103,7 @@ public class Grid extends JFrame{
     				}
     				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); //TODO: fix this
     				updateVertex(curr, sPrime, cost, open_list);
+    				System.out.println("Neighbor Vertex: " + sPrime.toString());
     			}
     		}
     		i++;		
@@ -108,7 +116,8 @@ public class Grid extends JFrame{
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
     	}
-    	
+    	System.out.println(aStarSolution.toString());
+    	System.out.println(open_list.toString());
     	HomeScreen.display("Drawing the path now.");
     	repaint();
     }
@@ -117,8 +126,8 @@ public class Grid extends JFrame{
     	if(s.getG_value() + cost < sPrime.getG_value()){
     		sPrime.setG_value(s.getG_value() + cost);
     		sPrime.parent = s;
-    		sPrime.setH_value(Utility.getDistance(startPoint, sPrime.getPoint()));
-    		sPrime.setF_value(s.getG_value() + s.getH_value());
+    		sPrime.setH_value(Utility.getDistance(goalPoint, sPrime.getPoint()));
+    		sPrime.setF_value(sPrime.getG_value() + sPrime.getH_value());
     		if(open_list.contains(sPrime)){
     			open_list.remove(sPrime);
     		}
