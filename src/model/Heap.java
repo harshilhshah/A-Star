@@ -29,6 +29,10 @@ public class Heap {
 		return size;
 	}
 	
+	public boolean contains(){
+		return true;
+	}
+	
 	public boolean isEmpty(){
 		return size == 0;
 	}
