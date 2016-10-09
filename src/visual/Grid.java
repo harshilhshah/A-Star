@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.Direction;
+import model.Heap;
 import model.Neighbor;
 import model.Node;
 import model.NodeComparator;
@@ -64,14 +65,19 @@ public class Grid extends JFrame{
     public void runAStar(){
     	ArrayList<Node> aStarNodeSolution = new ArrayList<Node>();
     	NodeComparator NC = new NodeComparator();
-    	PriorityQueue<Node> open_list = new PriorityQueue<Node>(NC);
+ //   	PriorityQueue<Node> open_list = new PriorityQueue<Node>(NC);
+    	Heap open_list = new Heap();
     	Node curr = new Node(startPoint,0,Utility.getDistance(startPoint, goalPoint));
     	open_list.add(curr); 
     	boolean[][] closed_list = new boolean[rows][cols];
     	int i = 0;
     	
     	while(!open_list.isEmpty()){
-    		curr = open_list.poll();
+    		curr = open_list.pop();
+    		if(curr == null){
+    			System.out.println("Curr was null");
+    			return;
+    		}
     		if(curr.getPoint().equals(goalPoint) || i == 200000){
     			aStarNodeSolution.add(curr);;
     			break;
@@ -79,20 +85,20 @@ public class Grid extends JFrame{
     		int cx = curr.getPoint().getX();
     		int cy = curr.getPoint().getY();
     		closed_list[cy][cx] = true; /*marked that point as visited, added to closed list*/
-    		System.out.println("Current Vertex: " + curr.toString());
+  //  		System.out.println("Current Vertex: " + curr.toString());
     		
     		//Find 8 surrounding neighbors
     		for(Neighbor n: Neighbor.neighnbors){
     			if(cx+n.getXChange() < 0 || cx+n.getXChange() >= cols || cy+n.getYChange() < 0 || cy+n.getYChange() >= rows){ /*checking for out of bounds*/
-    				System.out.println("OutOfBounds at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
+  //  				System.out.println("OutOfBounds at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
     				continue;
     			}
     			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL){ /*checking for blocked cells*/
-    				System.out.println("Blocked cell at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
+  //  				System.out.println("Blocked cell at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
     				continue;
     			}
     			else if(closed_list[cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
-    				System.out.println("Already visited:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) + ")");
+ //   				System.out.println("Already visited:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) + ")");
     				continue;
     			}
     			else{
@@ -104,7 +110,7 @@ public class Grid extends JFrame{
     				}
     				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); 
     				updateVertex(curr, sPrime, cost, open_list);
-    				System.out.println("Neighbor Vertex: " + sPrime.toString());
+ //   				System.out.println("Neighbor Vertex: " + sPrime.toString());
     			}
     		}
     		i++;		
@@ -118,12 +124,12 @@ public class Grid extends JFrame{
     		nod = nod.parent;
     	}
     	System.out.println(aStarSolution.toString());
-    	System.out.println(open_list.toString());
+//    	System.out.println(open_list.toString());
     	HomeScreen.display("Drawing the path now.");
     	repaint();
     }
     
-    public void updateVertex(Node s, Node sPrime, double cost, PriorityQueue<Node> open_list){
+    public void updateVertex(Node s, Node sPrime, double cost, Heap open_list){
     	if(s.getF_value() + cost + sPrime.getH_value() < sPrime.getF_value()){
     		sPrime.setG_value(s.getG_value() + cost);
     		sPrime.setF_value(sPrime.getG_value() + sPrime.getH_value());

@@ -1,39 +1,110 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Heap { 
 	
-	public Node root;
-	private int size;
+	private ArrayList<Node> list;
 	
-	public Heap (Node node){
-		root = node;
-		size = 1;
+	public Heap (){
+		list = new ArrayList<Node>();
 	}
 	
-	public int insert(Node node){
+	public void add(Node node){
+	list.add(node);
+	siftUp();
 		
-		return size;
-		
+/*		Node curr = root;
+		while (curr != null){
+			if(curr.compareTo(node) == 1){
+				if(curr.left == null){
+					node = curr.left;
+					curr = null;
+				}
+			}else if(curr.compareTo(node) == -1){
+				if(curr.right == null){
+					node = curr.right;
+					curr = null;
+				}
+			}
+			list.contains(node);
+		}
+		*/
+	}
+	
+	private void siftUp(){
+		int k = list.size() -1;
+		while (k !=0){
+			int parentindex = (k-1)/2;
+			Node curr = list.get(k);
+			Node parent = list.get(parentindex);
+			if(curr.compareTo(parent) == -1 ){
+				list.set(parentindex, curr);
+				list.set(k, parent);
+				k = parentindex;
+			}else{
+				break;
+			}
+				
+		}
+	}
+	
+	private void siftDown(){
+		int k = 0;
+		int left = 2*k+1;
+		int right = 0;
+		while(left < list.size()){
+			Node curr = list.get(k);
+			int min = left;
+			right = left+1;
+			if(right < list.size()){
+				if(list.get(right).compareTo(list.get(left)) < 0){
+					min++;
+				}
+			}
+			if(curr.compareTo(list.get(min)) > 0){
+				list.set(k, list.get(min));
+				list.set(min, curr);
+				k = min;
+				left = 2*k+1;
+			}else{
+				break;
+			}
+		}
 	}
 	
 	public Node pop(){
-		findNewMin();
-		return root;
+		if(list.size() == 0)
+			return null;
+		if(list.size() == 1)
+			return list.remove(0);
+		Node nodeToReturn = list.get(0);
+		list.set(0, list.remove(list.size()-1));
+		siftDown();
+		return nodeToReturn;
 	}
 	
-	private void findNewMin(){
-		
-	}
 	
 	public int getSize(){
-		return size;
+		return list.size();
 	}
 	
-	public boolean contains(){
-		return true;
+	public boolean contains(Node node){
+		for(int i = 0; i < list.size(); i++){
+			if(list.get(i).equals(node.getPoint()))
+				return true;
+		}
+		return false;
+	}
+	
+	public void remove(Node node){
+		for(int i = 0; i < list.size(); i++){
+			if(list.get(i).equals(node.getPoint()))
+				list.remove(i);
+		}
 	}
 	
 	public boolean isEmpty(){
-		return size == 0;
+		return list.size() == 0;
 	}
 }

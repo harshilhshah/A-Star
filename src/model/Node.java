@@ -100,6 +100,10 @@ public class Node {
 		return (this.compareTo(other) == 0 && this.getPoint().equals(other.getPoint()));
 	}
 	
+	public boolean equals(Point other){
+		return this.getPoint().equals(other);
+	}
+	
 	public String toString() {
 		return point.toString();
 	}
