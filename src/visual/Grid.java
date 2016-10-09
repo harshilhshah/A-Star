@@ -97,11 +97,12 @@ public class Grid extends JFrame{
     			}
     			else{
     				Node sPrime = new Node(new Point(cx+n.getXChange(),cy+n.getYChange()));
+    				sPrime.setH_value(Utility.getDistance(goalPoint, sPrime.getPoint()));
     				if(!open_list.contains(sPrime)){
-    					sPrime.setG_value(Integer.MAX_VALUE); 
+    					sPrime.setF_value(Integer.MAX_VALUE); 
     					sPrime.parent = null;
     				}
-    				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); //TODO: fix this
+    				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); 
     				updateVertex(curr, sPrime, cost, open_list);
     				System.out.println("Neighbor Vertex: " + sPrime.toString());
     			}
@@ -123,11 +124,10 @@ public class Grid extends JFrame{
     }
     
     public void updateVertex(Node s, Node sPrime, double cost, PriorityQueue<Node> open_list){
-    	if(s.getG_value() + cost < sPrime.getG_value()){
+    	if(s.getF_value() + cost + sPrime.getH_value() < sPrime.getF_value()){
     		sPrime.setG_value(s.getG_value() + cost);
-    		sPrime.parent = s;
-    		sPrime.setH_value(Utility.getDistance(goalPoint, sPrime.getPoint()));
     		sPrime.setF_value(sPrime.getG_value() + sPrime.getH_value());
+    		sPrime.parent = s;
     		if(open_list.contains(sPrime)){
     			open_list.remove(sPrime);
     		}
