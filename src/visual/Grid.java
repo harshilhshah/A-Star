@@ -399,7 +399,7 @@ public class Grid extends JFrame{
                 public void mouseClicked(MouseEvent e) {
                 	int x=e.getX() / (screen_width/cols);
                     int y=e.getY() / (screen_height/rows);
-                    JOptionPane.showMessageDialog(rootPane, grid[x][y].getNode().visualizeValues());
+                    JOptionPane.showMessageDialog(rootPane, grid[y][x].getNode().visualizeValues());
                 }
 
                 @Override
