@@ -104,6 +104,10 @@ public class Node {
 		return this.getPoint().equals(other);
 	}
 	
+	public String visualizeValues(){
+		return "G value: " + this.g_value + "\nH value: " + this.h_value + "\nF value: " + this.f_value;
+	}
+	
 	public String toString() {
 		return point.toString();
 	}

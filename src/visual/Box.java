@@ -2,6 +2,8 @@ package visual;
 
 import java.awt.Rectangle;
 
+import model.Node;
+import model.Point;
 import model.Terrain;
 
 public class Box extends Rectangle{
@@ -15,23 +17,17 @@ public class Box extends Rectangle{
 	
 	int heuristicCost = 0; //Heuristic cost
     int finalCost = 0; //G+H
-    int i, j;
-    Box parent;
+    Node node;
 
 	public Box(int c, int r, int cellWidth, int cellHeight){
 		super(c * cellWidth,r * cellHeight, cellWidth, cellHeight);
-		i = c;
-		j = r;
+		node = new Node();
+		node.setPoint(new Point(c,r));
 	}
 	
 	@Override
 	public String toString(){
 		return (getTerrain() == Terrain.PARTIALLY_BLOCKED_HIGHWAY_CELL || getTerrain() == Terrain.UNBLOCKED_HIGHWAY_CELL) ? getTerrain().toString() + highway_index : getTerrain().toString();
-	}
-	
-	@Override
-	public boolean equals(Object b){
-		return i == ((Box)b).i && j == ((Box)b).j;
 	}
 
 	public Terrain getTerrain() {
@@ -42,12 +38,8 @@ public class Box extends Rectangle{
 		this.terrain = terrain;
 	}
 	
-	protected Box getParent() {
-		return parent;
-	}
-
-	protected void setParent(Box parent) {
-		this.parent = parent;
+	public Node getNode(){
+		return this.node;
 	}
 
 	

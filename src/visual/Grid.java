@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Direction;
@@ -64,20 +67,15 @@ public class Grid extends JFrame{
     
     public void runAStar(){
     	ArrayList<Node> aStarNodeSolution = new ArrayList<Node>();
-    	NodeComparator NC = new NodeComparator();
- //   	PriorityQueue<Node> open_list = new PriorityQueue<Node>(NC);
     	Heap open_list = new Heap();
-    	Node curr = new Node(startPoint,0,Utility.getDistance(startPoint, goalPoint));
+    	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
+    	curr.setH_value(Utility.getDistance(startPoint, goalPoint));
     	open_list.add(curr); 
     	boolean[][] closed_list = new boolean[rows][cols];
     	int i = 0;
     	
     	while(!open_list.isEmpty()){
     		curr = open_list.pop();
-    		if(curr == null){
-    			System.out.println("Curr was null");
-    			return;
-    		}
     		if(curr.getPoint().equals(goalPoint) || i == 200000){
     			aStarNodeSolution.add(curr);;
     			break;
@@ -102,7 +100,7 @@ public class Grid extends JFrame{
     				continue;
     			}
     			else{
-    				Node sPrime = new Node(new Point(cx+n.getXChange(),cy+n.getYChange()));
+    				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
     				sPrime.setH_value(Utility.getDistance(goalPoint, sPrime.getPoint()));
     				if(!open_list.contains(sPrime)){
     					sPrime.setF_value(Integer.MAX_VALUE); 
@@ -394,7 +392,24 @@ public class Grid extends JFrame{
 
     public class PaintPane extends JPanel {
 
-        public PaintPane() {}
+        public PaintPane() {
+        	addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                	int x=e.getX() / (screen_width/cols);
+                    int y=e.getY() / (screen_height/rows);
+                    JOptionPane.showMessageDialog(rootPane, grid[x][y].getNode().visualizeValues());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                	
+                }
+            });
+        }
+        
+        
 
         @Override
         public Dimension getPreferredSize() {
@@ -425,8 +440,8 @@ public class Grid extends JFrame{
         					g2d.setColor(Color.WHITE);
         			}
         			
-        			if( aStarSolution.contains(new Point(cell.i,cell.j)) || new Point(cell.i,cell.j).equals(goalPoint)
-        					|| new Point(cell.i,cell.j).equals(startPoint)){
+        			if( aStarSolution.contains(cell.getNode().getPoint()) || cell.getNode().getPoint().equals(goalPoint)
+        					|| cell.getNode().getPoint().equals(startPoint)){
         				g2d.setColor(Color.MAGENTA);
         			}
       
