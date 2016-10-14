@@ -3,53 +3,52 @@ package model;
 import java.util.ArrayList;
 
 import controller.Utility;
+import visual.Box;
 import visual.Grid;
 import visual.HomeScreen;
 
 public class UniformCostSearch extends AStar{
 
-	public UniformCostSearch(Grid g, Point startPoint, Point goalPoint){
+	public UniformCostSearch(Box[][] g){
 		this.grid = g;
+		if(g == null || g.length == 0) throw new NullPointerException();
+		this.rows = (short) g.length;
+		this.cols = (short) g[0].length;
 	}
 	
 	@Override
-    public ArrayList<Node> runAStar(){
+    public ArrayList<Node> runAStar(Point startPoint, Point goalPoint){
     	ArrayList<Node> aStarNodeSolution = new ArrayList<Node>();
     	Heap open_list = new Heap();
     	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
-    	curr.setH_value(Utility.getDistance(startPoint, goalPoint));
+    	curr.setH_value(0);
     	open_list.add(curr); 
     	boolean[][] closed_list = new boolean[rows][cols];
-    	int i = 0;
     	
     	while(!open_list.isEmpty()){
     		curr = open_list.pop();
-    		if(curr.getPoint().equals(goalPoint) || i == 200000){
+    		if(curr.getPoint().equals(goalPoint)){
     			aStarNodeSolution.add(curr);;
     			break;
     		}/*Path found!*/
     		int cx = curr.getPoint().getX();
     		int cy = curr.getPoint().getY();
     		closed_list[cy][cx] = true; /*marked that point as visited, added to closed list*/
-  //  		System.out.println("Current Vertex: " + curr.toString());
-    		
+
     		//Find 8 surrounding neighbors
     		for(Neighbor n: Neighbor.neighnbors){
     			if(cx+n.getXChange() < 0 || cx+n.getXChange() >= cols || cy+n.getYChange() < 0 || cy+n.getYChange() >= rows){ /*checking for out of bounds*/
-  //  				System.out.println("OutOfBounds at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
     				continue;
     			}
     			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL){ /*checking for blocked cells*/
-  //  				System.out.println("Blocked cell at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
     				continue;
     			}
     			else if(closed_list[cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
- //   				System.out.println("Already visited:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) + ")");
     				continue;
     			}
     			else{
     				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
-    				sPrime.setH_value(Utility.getDistance(goalPoint, sPrime.getPoint()));
+    				sPrime.setH_value(0);
     				if(!open_list.contains(sPrime)){
     					sPrime.setF_value(Integer.MAX_VALUE); 
     					sPrime.parent = null;
@@ -58,21 +57,11 @@ public class UniformCostSearch extends AStar{
     				updateVertex(curr, sPrime, cost, open_list);
  //   				System.out.println("Neighbor Vertex: " + sPrime.toString());
     			}
-    		}
-    		i++;		
+    		}		
     	}
     	
     	System.out.println("Done");
-    	if(aStarNodeSolution.size() == 0) aStarNodeSolution.add(curr);
-    	Node nod = aStarNodeSolution.get(0);
-    	while(nod != null){
-    		aStarSolution.add(nod.getPoint());
-    		nod = nod.parent;
-    	}
-    	System.out.println(aStarSolution.toString());
-//    	System.out.println(open_list.toString());
-    	HomeScreen.display("Drawing the path now.");
-    	repaint();
+    	return aStarNodeSolution;
     }
 
 	@Override

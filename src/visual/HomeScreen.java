@@ -94,7 +94,7 @@ public class HomeScreen extends Applet implements ActionListener {
 			}
 			else{
 				display("Loading...");
-				g.runAStar();
+				g.runUniformCostSearch();
 			}
 		}
 		else if(e.getSource() == writePathBtn){

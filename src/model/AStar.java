@@ -2,14 +2,16 @@ package model;
 
 import java.util.ArrayList;
 
-import visual.Grid;
+import visual.Box;
 
 public abstract class AStar {
 	
 	public int weight;
-	public Grid grid;
+	public short rows;
+	public short cols;
+	public Box[][] grid;
 	
-	public abstract ArrayList<Node> runAStar();
+	public abstract ArrayList<Node> runAStar(Point startPoint, Point goalPoint);
 	
 	public abstract void updateVertex(Node s, Node sPrime, double cost, Heap open_list);
 	

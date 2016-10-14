@@ -23,6 +23,7 @@ import model.Node;
 import model.NodeComparator;
 import model.Point;
 import model.Terrain;
+import model.UniformCostSearch;
 import controller.Utility;
 
 public class Grid extends JFrame{
@@ -65,7 +66,19 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
+    public void runUniformCostSearch(){
+    	UniformCostSearch uas = new UniformCostSearch(this.grid);
+    	ArrayList<Node> path = uas.runAStar(startPoint, goalPoint);
+    	Node nod = path.get(0);
+    	while(nod != null){
+    		aStarSolution.add(nod.getPoint());
+    		nod = nod.parent;
+    	}
+    	repaint();
+    }
+    
     public void runAStar(){
+    	
     	ArrayList<Node> aStarNodeSolution = new ArrayList<Node>();
     	Heap open_list = new Heap();
     	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
