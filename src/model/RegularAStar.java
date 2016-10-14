@@ -2,16 +2,15 @@ package model;
 
 import visual.Box;
 
-public class UniformCostSearch extends AStar{
+public class RegularAStar extends AStar {
 
-	public UniformCostSearch(Box[][] g){
+	public RegularAStar(Box[][] g){
 		this.grid = g;
 		if(g == null || g.length == 0) throw new NullPointerException();
-		this.weight = 0;
+		this.weight = 1;
 		this.rows = (short) g.length;
 		this.cols = (short) g[0].length;
-		this.hType = HeuristicType.NONE;
+		this.hType = HeuristicType.EUCLIDEAN;
 	}
-
 
 }

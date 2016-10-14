@@ -1,7 +1,7 @@
 package model;
 
 public enum HeuristicType{
-	EUCLIDEAN(0), MANHATTAN(1);
+	NONE(-1), EUCLIDEAN(0), MANHATTAN(1);
 	
 	int i;
 	
@@ -16,7 +16,7 @@ public enum HeuristicType{
 			case 1:
 				return (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY())) * 1.0;
 			default:
-				return 1.0;
+				return 0.0;
 		}
 		
 		
