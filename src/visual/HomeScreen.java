@@ -17,7 +17,7 @@ public class HomeScreen extends Applet implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
-	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, exitBtn, genNewStrtGoal;
+	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, waStarBtn, uaStarBtn, exitBtn, genNewStrtGoal;
 	static JLabel lbl = new JLabel("");
 	Grid g;
 
@@ -34,9 +34,17 @@ public class HomeScreen extends Applet implements ActionListener {
 		add(readMapBtn);
 		readMapBtn.addActionListener(this);
 		
+		uaStarBtn = new Button("Execute Uniform Cost Search");
+		add(uaStarBtn);
+		uaStarBtn.addActionListener(this);
+		
 		aStarBtn = new Button("Execute A*");
 		add(aStarBtn);
 		aStarBtn.addActionListener(this);
+		
+		waStarBtn = new Button("Execute weighted A*");
+		add(waStarBtn);
+		waStarBtn.addActionListener(this);
 		
 		genNewStrtGoal = new Button("Generate new Stand,Goal points");
 		add(genNewStrtGoal);
@@ -98,12 +106,29 @@ public class HomeScreen extends Applet implements ActionListener {
 			}
 			else{
 				display("Loading...");
-//				g.runRegularAStar();
-//				g.runUniformCostSearch();
+				g.runRegularAStar();
+			}
+		}
+		else if(e.getSource() == uaStarBtn){
+			if(g == null){
+				displayError("Can't find a map to traverse.");
+			}
+			else{
+				display("Loading...");
 				g.runWeightedAStar(1);
 			}
 		}
-		else if(e.getSource() == genNewStrtGoal){
+		else if(e.getSource() == waStarBtn){
+			if(g == null){
+				displayError("Can't find a map to traverse.");
+			}
+			else{
+				display("Loading...");
+				g.runUniformCostSearch();
+			}
+		}
+		else 
+			if(e.getSource() == genNewStrtGoal){
 			if(g == null){
 				displayError("Can't generate new Start and Goal points");
 			}
