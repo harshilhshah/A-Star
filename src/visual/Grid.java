@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import model.AStar;
 import model.Direction;
 import model.Heap;
 import model.HeuristicType;
@@ -71,33 +72,11 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
-    public void runUniformCostSearch(){
-    	UniformCostSearch uas = new UniformCostSearch(this.grid);
-    	Node nod = uas.runAStar(startPoint, goalPoint);    	
-    	while(nod != null){
-    		aStarSolution.add(nod.getPoint());
-    		nod = nod.parent;
-    	}
-    	HomeScreen.display("Drawing the path now.");
-    	repaint();
-    }
-    
-    public void runRegularAStar(){
-    	RegularAStar ras = new RegularAStar(this.grid, HeuristicType.MANHATTAN);
+    public void runAStar(AStar astar){
+    	AStar ras = astar;
     	Node nod = ras.runAStar(startPoint, goalPoint);
     	if(nod == null)
     		HomeScreen.display("No path found");
-    	while(nod != null){
-    		aStarSolution.add(nod.getPoint());
-    		nod = nod.parent;
-    	}
-    	HomeScreen.display("Drawing the path now.");
-    	repaint();
-    }
-    
-    public void runWeightedAStar(double weight){
-    	WeightedAStar ras = new WeightedAStar(this.grid, weight, HeuristicType.RANDOM);
-    	Node nod = ras.runAStar(startPoint, goalPoint);    	
     	while(nod != null){
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;

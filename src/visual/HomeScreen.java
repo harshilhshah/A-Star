@@ -11,6 +11,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import model.HeuristicType;
+import model.RegularAStar;
+import model.UniformCostSearch;
+import model.WeightedAStar;
 import controller.Utility;
 
 public class HomeScreen extends Applet implements ActionListener {
@@ -106,16 +110,7 @@ public class HomeScreen extends Applet implements ActionListener {
 			}
 			else{
 				display("Loading...");
-				g.runRegularAStar();
-			}
-		}
-		else if(e.getSource() == uaStarBtn){
-			if(g == null){
-				displayError("Can't find a map to traverse.");
-			}
-			else{
-				display("Loading...");
-				g.runWeightedAStar(1);
+				g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.MANHATTAN));
 			}
 		}
 		else if(e.getSource() == waStarBtn){
@@ -124,7 +119,16 @@ public class HomeScreen extends Applet implements ActionListener {
 			}
 			else{
 				display("Loading...");
-				g.runUniformCostSearch();
+				g.runAStar(new WeightedAStar(g.getGrid(), 1.0,HeuristicType.MANHATTAN));
+			}
+		}
+		else if(e.getSource() == uaStarBtn){
+			if(g == null){
+				displayError("Can't find a map to traverse.");
+			}
+			else{
+				display("Loading...");
+				g.runAStar(new UniformCostSearch(g.getGrid()));
 			}
 		}
 		else 

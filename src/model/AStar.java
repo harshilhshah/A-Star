@@ -10,6 +10,7 @@ public abstract class AStar {
 	public double weight;
 	public short rows;
 	public short cols;
+	public int numNodesVisited = 0;
 	public Box[][] grid;
 	public HeuristicType hType;
 	
@@ -29,6 +30,7 @@ public abstract class AStar {
     		int cx = curr.getPoint().getX();
     		int cy = curr.getPoint().getY();
     		closed_list[cy][cx] = true; /*marked that point as visited, added to closed list*/
+    		numNodesVisited++;
 
     		//Find 8 surrounding neighbors
     		for(Neighbor n: Neighbor.neighnbors){
