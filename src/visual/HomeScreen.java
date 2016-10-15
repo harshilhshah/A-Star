@@ -69,7 +69,7 @@ public class HomeScreen extends Applet implements ActionListener {
 					(Component) getAppletContext(),"Enter file name:", "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, null, ".txt");
 			display(s);
 			try {
-				g = new Grid(Utility.readFile(s));
+				g = Utility.readFile(s);
 			} catch (IOException err) {
 				displayError("File not found");
 			}

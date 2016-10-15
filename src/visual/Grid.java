@@ -60,9 +60,11 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
-    public Grid(Box[][] grid){
+    public Grid(Box[][] grid, Point sp, Point gp, Point[] regions){
     	this.grid = grid;
-    	generateStartAndGoal();
+    	this.startPoint = sp;
+    	this.goalPoint = gp;
+    	this.difficultTerrain = regions;
     	setWindowProperties();
     }
     
@@ -74,82 +76,8 @@ public class Grid extends JFrame{
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
     	}
-    	repaint();
-    }
-    
-    public void runAStar(){
-    	
-    	ArrayList<Node> aStarNodeSolution = new ArrayList<Node>();
-    	Heap open_list = new Heap();
-    	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
-    	curr.setH_value(Utility.getDistance(startPoint, goalPoint));
-    	open_list.add(curr); 
-    	boolean[][] closed_list = new boolean[rows][cols];
-    	int i = 0;
-    	
-    	while(!open_list.isEmpty()){
-    		curr = open_list.pop();
-    		if(curr.getPoint().equals(goalPoint) || i == 200000){
-    			aStarNodeSolution.add(curr);;
-    			break;
-    		}/*Path found!*/
-    		int cx = curr.getPoint().getX();
-    		int cy = curr.getPoint().getY();
-    		closed_list[cy][cx] = true; /*marked that point as visited, added to closed list*/
-  //  		System.out.println("Current Vertex: " + curr.toString());
-    		
-    		//Find 8 surrounding neighbors
-    		for(Neighbor n: Neighbor.neighnbors){
-    			if(cx+n.getXChange() < 0 || cx+n.getXChange() >= cols || cy+n.getYChange() < 0 || cy+n.getYChange() >= rows){ /*checking for out of bounds*/
-  //  				System.out.println("OutOfBounds at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
-    				continue;
-    			}
-    			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL){ /*checking for blocked cells*/
-  //  				System.out.println("Blocked cell at:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) +")");
-    				continue;
-    			}
-    			else if(closed_list[cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
- //   				System.out.println("Already visited:("+ (cy+n.getYChange()) + "," + (cx+n.getXChange()) + ")");
-    				continue;
-    			}
-    			else{
-    				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
-    				sPrime.setH_value(Utility.getDistance(goalPoint, sPrime.getPoint()));
-    				if(!open_list.contains(sPrime)){
-    					sPrime.setF_value(Integer.MAX_VALUE); 
-    					sPrime.parent = null;
-    				}
-    				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); 
-    				updateVertex(curr, sPrime, cost, open_list);
- //   				System.out.println("Neighbor Vertex: " + sPrime.toString());
-    			}
-    		}
-    		i++;		
-    	}
-    	
-    	System.out.println("Done");
-    	if(aStarNodeSolution.size() == 0) aStarNodeSolution.add(curr);
-    	Node nod = aStarNodeSolution.get(0);
-    	while(nod != null){
-    		aStarSolution.add(nod.getPoint());
-    		nod = nod.parent;
-    	}
-    	System.out.println(aStarSolution.toString());
-//    	System.out.println(open_list.toString());
     	HomeScreen.display("Drawing the path now.");
     	repaint();
-    }
-    
-    public void updateVertex(Node s, Node sPrime, double cost, Heap open_list){
-    	if(s.getF_value() + cost + sPrime.getH_value() < sPrime.getF_value()){
-    		sPrime.setG_value(s.getG_value() + cost);
-    		sPrime.setF_value(sPrime.getG_value() + sPrime.getH_value());
-    		sPrime.parent = s;
-    		if(open_list.contains(sPrime)){
-    			open_list.remove(sPrime);
-    		}
-    		open_list.add(sPrime);
-    	}
     }
     
     public void generateRegions(){
@@ -498,6 +426,11 @@ public class Grid extends JFrame{
     @Override
     public String toString(){
     	String ret = "";
+    	ret += startPoint.getY() + "," + startPoint.getX();
+    	ret += goalPoint.getY() + "," + goalPoint.getX();
+    	for(Point p: difficultTerrain){
+    		ret += p.getY() + "," + p.getX();
+    	}
     	ret += String.valueOf(rows) + "," + String.valueOf(cols) + "\n";
     	for(short i = 0; i < rows; i++){
     		for(short j = 0; j < cols; j++){

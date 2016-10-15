@@ -118,9 +118,21 @@ public class Utility{
 		return isDiagonal ? Math.sqrt(2) : 1.0;
 	}
 
-	public static Box[][] readFile(String filepath) throws FileNotFoundException, IOException{
+	public static Grid readFile(String filepath) throws FileNotFoundException, IOException{
 		BufferedReader br = new BufferedReader(new FileReader(filepath));
 		String line = br.readLine();
+		String[] split = line.split(",");
+		Point startPoint = new Point(Integer.parseInt(split[1]),Integer.parseInt(split[0]));
+		line = br.readLine();
+		split = line.split(",");
+		Point goalPoint = new Point(Integer.parseInt(split[1]),Integer.parseInt(split[0]));
+		Point[] difficultTerrain = new Point[8];
+		for(int i = 0; i < 8; i++){
+			line = br.readLine();
+			split = line.split(",");
+			difficultTerrain[i] = new Point(Integer.parseInt(split[1]),Integer.parseInt(split[0]));
+		}
+		line = br.readLine();
 		String[] dimensions = line.split(",");
 		short rows = (short) Integer.parseInt(dimensions[0]);
 		short cols = (short) Integer.parseInt(dimensions[1]);
@@ -157,7 +169,7 @@ public class Utility{
 			i++;
 		}
 		br.close();
-		return grid;
+		return new Grid(grid,startPoint,goalPoint,difficultTerrain);
 	}
 
 	public static void writeFile(String filename, String bigString) throws FileNotFoundException, UnsupportedEncodingException{
