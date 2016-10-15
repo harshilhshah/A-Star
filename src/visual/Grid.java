@@ -426,10 +426,10 @@ public class Grid extends JFrame{
     @Override
     public String toString(){
     	String ret = "";
-    	ret += startPoint.getY() + "," + startPoint.getX();
-    	ret += goalPoint.getY() + "," + goalPoint.getX();
+    	ret += startPoint.getY() + "," + startPoint.getX() + "\n";
+    	ret += goalPoint.getY() + "," + goalPoint.getX() + "\n";
     	for(Point p: difficultTerrain){
-    		ret += p.getY() + "," + p.getX();
+    		ret += p.getY() + "," + p.getX() + "\n";
     	}
     	ret += String.valueOf(rows) + "," + String.valueOf(cols) + "\n";
     	for(short i = 0; i < rows; i++){

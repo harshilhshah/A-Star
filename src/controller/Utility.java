@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -174,7 +175,7 @@ public class Utility{
 
 	public static void writeFile(String filename, String bigString) throws FileNotFoundException, UnsupportedEncodingException{
 		PrintWriter writer;
-		writer = new PrintWriter(filename, "UTF-8");
+		writer = new PrintWriter(new File(".." + File.separator + "src" + File.separator + filename));
 		for(String s: bigString.split("\n")){
 			writer.println(s);
 		}
