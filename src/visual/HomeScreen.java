@@ -17,7 +17,7 @@ public class HomeScreen extends Applet implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
-	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, exitBtn;
+	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, exitBtn, genNewStrtGoal;
 	static JLabel lbl = new JLabel("");
 	Grid g;
 
@@ -37,6 +37,10 @@ public class HomeScreen extends Applet implements ActionListener {
 		aStarBtn = new Button("Execute A*");
 		add(aStarBtn);
 		aStarBtn.addActionListener(this);
+		
+		genNewStrtGoal = new Button("Generate new Stand,Goal points");
+		add(genNewStrtGoal);
+		genNewStrtGoal.addActionListener(this);
 		
 		writePathBtn = new Button("Save result");
 		add(writePathBtn);
@@ -94,7 +98,17 @@ public class HomeScreen extends Applet implements ActionListener {
 			}
 			else{
 				display("Loading...");
-				g.runUniformCostSearch();
+//				g.runRegularAStar();
+//				g.runUniformCostSearch();
+				g.runWeightedAStar(1);
+			}
+		}
+		else if(e.getSource() == genNewStrtGoal){
+			if(g == null){
+				displayError("Can't generate new Start and Goal points");
+			}
+			else{
+				g.generateStartAndGoal();
 			}
 		}
 		else if(e.getSource() == writePathBtn){

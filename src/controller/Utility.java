@@ -182,7 +182,7 @@ public class Utility{
 		writer.close();
 	}
 
-	private static Point generateRandomPoint(){
+	public static Point generateRandomPoint(){
 		return new Point(random.nextInt(Grid.cols),random.nextInt(Grid.rows));
 	}
 	

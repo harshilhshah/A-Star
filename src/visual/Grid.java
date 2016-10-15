@@ -18,12 +18,15 @@ import javax.swing.JPanel;
 
 import model.Direction;
 import model.Heap;
+import model.HeuristicType;
 import model.Neighbor;
 import model.Node;
 import model.NodeComparator;
 import model.Point;
+import model.RegularAStar;
 import model.Terrain;
 import model.UniformCostSearch;
+import model.WeightedAStar;
 import controller.Utility;
 
 public class Grid extends JFrame{
@@ -70,8 +73,31 @@ public class Grid extends JFrame{
     
     public void runUniformCostSearch(){
     	UniformCostSearch uas = new UniformCostSearch(this.grid);
-    	ArrayList<Node> path = uas.runAStar(startPoint, goalPoint);
-    	Node nod = path.get(0);
+    	Node nod = uas.runAStar(startPoint, goalPoint);    	
+    	while(nod != null){
+    		aStarSolution.add(nod.getPoint());
+    		nod = nod.parent;
+    	}
+    	HomeScreen.display("Drawing the path now.");
+    	repaint();
+    }
+    
+    public void runRegularAStar(){
+    	RegularAStar ras = new RegularAStar(this.grid, HeuristicType.MANHATTAN);
+    	Node nod = ras.runAStar(startPoint, goalPoint);
+    	if(nod == null)
+    		HomeScreen.display("No path found");
+    	while(nod != null){
+    		aStarSolution.add(nod.getPoint());
+    		nod = nod.parent;
+    	}
+    	HomeScreen.display("Drawing the path now.");
+    	repaint();
+    }
+    
+    public void runWeightedAStar(double weight){
+    	WeightedAStar ras = new WeightedAStar(this.grid, weight, HeuristicType.RANDOM);
+    	Node nod = ras.runAStar(startPoint, goalPoint);    	
     	while(nod != null){
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
@@ -258,6 +284,10 @@ public class Grid extends JFrame{
     }
     
     public void generateStartAndGoal(){
+    	startPoint = null;
+    	goalPoint = null;
+    	totalPathCost = 0.0;
+    	aStarSolution.clear();
     	for(int run = 0; run != 2; run++){
 	    	Direction topBottom = Utility.randomBoolean()? Direction.UP : Direction.DOWN;
 	    	Direction leftRight = Utility.randomBoolean()? Direction.LEFT : Direction.RIGHT;
@@ -316,6 +346,7 @@ public class Grid extends JFrame{
 	    			run--;
 	    	}
     	}
+    	repaint();
     }
 
     public void setWindowProperties(){
@@ -385,6 +416,10 @@ public class Grid extends JFrame{
         					|| cell.getNode().getPoint().equals(startPoint)){
         				g2d.setColor(Color.MAGENTA);
         			}
+        			if(cell.getNode().getPoint().equals(startPoint))
+        				g2d.setColor(Color.RED);
+        			if(cell.getNode().getPoint().equals(goalPoint))
+        				g2d.setColor(Color.GREEN);
       
         			g2d.fill(cell);
         			g2d.setColor(Color.DARK_GRAY);
@@ -402,6 +437,10 @@ public class Grid extends JFrame{
     
     public Point getGoalPoint(){
     	return goalPoint;
+    }
+    
+    public Box[][] getGrid(){
+    	return grid;
     }
     
     public Point[] getDifficultTerrain(){

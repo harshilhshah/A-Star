@@ -13,8 +13,8 @@ public abstract class AStar {
 	public Box[][] grid;
 	public HeuristicType hType;
 	
-    public ArrayList<Node> runAStar(Point startPoint, Point goalPoint){
-    	ArrayList<Node> aStarNodeSolution = new ArrayList<Node>();
+    public Node runAStar(Point startPoint, Point goalPoint){
+    	Node aStarNodeSolution = null;
     	Heap open_list = new Heap();
     	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
     	curr.setH_value(hType.getDistance(startPoint, goalPoint)*weight);
@@ -24,8 +24,7 @@ public abstract class AStar {
     	while(!open_list.isEmpty()){
     		curr = open_list.pop();
     		if(curr.getPoint().equals(goalPoint)){
-    			aStarNodeSolution.add(curr);;
-    			break;
+    			return curr;
     		}/*Path found!*/
     		int cx = curr.getPoint().getX();
     		int cy = curr.getPoint().getY();
@@ -44,7 +43,7 @@ public abstract class AStar {
     			}
     			else{
     				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
-    				sPrime.setH_value(hType.getDistance(startPoint, goalPoint));
+    				sPrime.setH_value(hType.getDistance(sPrime.getPoint(), goalPoint)*weight);
     				if(!open_list.contains(sPrime)){
     					sPrime.setF_value(Integer.MAX_VALUE); 
     					sPrime.parent = null;
