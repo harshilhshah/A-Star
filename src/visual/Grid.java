@@ -72,17 +72,36 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
-    public void runAStar(AStar astar){
+    public double[] runAStar(AStar astar){
+    	double[] solutions = new double[5];
     	AStar ras = astar;
+    	long startTime = System.currentTimeMillis();
     	Node nod = ras.runAStar(startPoint, goalPoint);
+    	long endTime = System.currentTimeMillis();
+    	long totalTime = endTime - startTime;
+    	Runtime runtime = Runtime.getRuntime();
+    	runtime.gc();
+    	double memory = runtime.totalMemory() - runtime.freeMemory();
     	if(nod == null)
     		HomeScreen.display("No path found");
+    	totalPathCost = nod.getG_value();
     	while(nod != null){
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
     	}
+    	solutions[0] = ras.numNodesExpanded;
+    	solutions[1] = Double.valueOf(String.format("%.6f", totalPathCost));
+    	solutions[2] = aStarSolution.size();
+    	solutions[3] = totalTime;
+    	solutions[4] = Double.valueOf(String.format("%.6f", memory / 1024 / 1024));
+    	System.out.println("# of Expanded:" + ras.numNodesExpanded);
+    	System.out.println("Cost:" + String.format("%.6f", totalPathCost));
+    	System.out.println("Solution length:" + aStarSolution.size());
+    	System.out.println("Execution time:" + totalTime +"ms");
+    	System.out.println("Used memory in MB:" + String.format("%.6f", memory / 1024 / 1024));
     	HomeScreen.display("Drawing the path now.");
     	repaint();
+    	return solutions;
     }
     
     public void generateRegions(){

@@ -10,7 +10,7 @@ public abstract class AStar {
 	public double weight;
 	public short rows;
 	public short cols;
-	public int numNodesVisited = 0;
+	public int numNodesExpanded = 0;
 	public Box[][] grid;
 	public HeuristicType hType;
 	
@@ -30,7 +30,7 @@ public abstract class AStar {
     		int cx = curr.getPoint().getX();
     		int cy = curr.getPoint().getY();
     		closed_list[cy][cx] = true; /*marked that point as visited, added to closed list*/
-    		numNodesVisited++;
+    		numNodesExpanded++;
 
     		//Find 8 surrounding neighbors
     		for(Neighbor n: Neighbor.neighnbors){
@@ -56,6 +56,7 @@ public abstract class AStar {
     		}		
     	}
     	
+    	System.out.println("Number of nodes expanded:" + numNodesExpanded);
     	System.out.println("Done");
     	return aStarNodeSolution;
     }

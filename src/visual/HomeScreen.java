@@ -110,7 +110,20 @@ public class HomeScreen extends Applet implements ActionListener {
 			}
 			else{
 				display("Loading...");
-				g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.MANHATTAN));
+				double[] averages = new double[5];
+				for(int i = 0; i < 6; i++){
+					System.out.println(HeuristicType.values()[i]);
+					double[] currAverages = g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.values()[i]));
+					for(int j = 0; j < 5; j++){
+						averages[j] += currAverages[j];
+					}
+					System.out.println();
+				}
+				for(int k = 0; k < 5; k++){
+					averages[k] /= 5;
+					System.out.println(k+") "+averages[k]);
+				}
+//				g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.EUCLIDEAN));
 			}
 		}
 		else if(e.getSource() == waStarBtn){
@@ -118,8 +131,21 @@ public class HomeScreen extends Applet implements ActionListener {
 				displayError("Can't find a map to traverse.");
 			}
 			else{
-				display("Loading...");
-				g.runAStar(new WeightedAStar(g.getGrid(), 1.0,HeuristicType.MANHATTAN));
+			display("Loading...");
+			double[] averages = new double[5];
+			for(int i = 0; i < 6; i++){
+				System.out.println(HeuristicType.values()[i]);
+				double[] currAverages = g.runAStar(new WeightedAStar(g.getGrid(), 1.5, HeuristicType.values()[i]));
+				for(int j = 0; j < 5; j++){
+					averages[j] += currAverages[j];
+					}
+				System.out.println();
+			}
+				for(int k = 0; k < 5; k++){
+				averages[k] /= 5;
+				System.out.println(k+") "+averages[k]);
+				}
+//				g.runAStar(new WeightedAStar(g.getGrid(), 3, HeuristicType.values()[i]));
 			}
 		}
 		else if(e.getSource() == uaStarBtn){
