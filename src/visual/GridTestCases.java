@@ -14,11 +14,11 @@ public class GridTestCases {
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Grid[] gList = new Grid[5];
-		gList[0] = Utility.readFile(".." + File.separator + "src" + File.separator +"map1.txt");
-		gList[1] = Utility.readFile("map2.txt");
-		gList[2] = Utility.readFile("map3.txt");
-		gList[3] = Utility.readFile("map4.txt");
-		gList[4] = Utility.readFile("map5.txt");
+		gList[0] = Utility.readFile("src/map1.txt");
+		gList[1] = Utility.readFile("src/map2.txt");
+		gList[2] = Utility.readFile("src/map3.txt");
+		gList[3] = Utility.readFile("src/map4.txt");
+		gList[4] = Utility.readFile("src/map5.txt");
 		
 		for(int i = 0; i < 5; i++){
 			System.out.println("FOR MAP"+ i+1 +" : Regular A*\n");
