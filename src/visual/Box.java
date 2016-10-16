@@ -8,15 +8,9 @@ import model.Terrain;
 
 public class Box extends Rectangle{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Terrain terrain = Terrain.UNBLOCKED_CELL;
 	private int highway_index = 0;
-	
-	int heuristicCost = 0; //Heuristic cost
-    int finalCost = 0; //G+H
     Node node;
 
 	public Box(int c, int r, int cellWidth, int cellHeight){

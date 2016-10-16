@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -18,16 +17,9 @@ import javax.swing.JPanel;
 
 import model.AStar;
 import model.Direction;
-import model.Heap;
-import model.HeuristicType;
-import model.Neighbor;
 import model.Node;
-import model.NodeComparator;
 import model.Point;
-import model.RegularAStar;
 import model.Terrain;
-import model.UniformCostSearch;
-import model.WeightedAStar;
 import controller.Utility;
 
 public class Grid extends JFrame{
@@ -339,7 +331,6 @@ public class Grid extends JFrame{
 	    	else if(run == 1){
 	    		goalPoint = chosen;
 	    		int euclideanDistance = (int) Utility.getDistance(startPoint, goalPoint);
-//	    		System.out.println(euclideanDistance);
 	    		if(euclideanDistance < 100)
 	    			run--;
 	    	}
