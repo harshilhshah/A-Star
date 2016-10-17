@@ -13,12 +13,17 @@ import java.util.Random;
 import visual.Box;
 import visual.Grid;
 import model.Direction;
+import model.Node;
 import model.Point;
 import model.Terrain;
 
 public class Utility{
 	
 	public static final Random random = new Random();
+	
+	public static Node pointToNode(Box[][] g, Point p){
+		return g[p.getY()][p.getX()].getNode();
+	}
 	
 	public static ArrayList<Point> generateRandomPoints(int numOfPoints){
 		

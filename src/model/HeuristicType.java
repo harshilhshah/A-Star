@@ -39,7 +39,6 @@ public enum HeuristicType{
 			case 5:
 				Point bottomright = new Point(0, 200 ); //col,row
 				double pointToBR = Math.sqrt(Math.pow(p1.getX() - bottomright.getX(), 2) + Math.pow(p1.getY() - bottomright.getY(),2));
-				double BRtoGoal = Math.sqrt(Math.pow(bottomright.getX() - p2.getX(), 2) + Math.pow(bottomright.getY() - p2.getY(),2));
 				return pointToBR;
 			default:
 				return 0.0;

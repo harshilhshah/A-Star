@@ -10,6 +10,18 @@ public class Heap {
 		list = new ArrayList<Node>();
 	}
 	
+	public double MinKey(){
+		return 0.0; // TODO: change this
+	}
+	
+	public Node Top(){
+		return null; // TODO
+	}
+	
+	public void add(Node n, double key){
+		//TODO
+	}
+	
 	public void add(Node node){
 	list.add(node);
 	siftUp();

@@ -5,20 +5,31 @@ import visual.Box;
 
 public abstract class AStar {
 	
-	public double weight;
-	public short rows;
-	public short cols;
 	public int numNodesExpanded = 0;
-	public Box[][] grid;
-	public HeuristicType hType;
+	
+	short rows;
+	short cols;
+	double weight;
+	double totalPathcost;
+	Box[][] grid;
+	Node[][] node_grid;
+	HeuristicType hType;
+	
+	AStar(Box[][] g){
+		if(g == null || g.length == 0) throw new NullPointerException();
+		grid = g;
+		rows = (short) g.length;
+		cols = (short) g[0].length;
+	}
+	
 	
     public Node runAStar(Point startPoint, Point goalPoint){
     	Node aStarNodeSolution = null;
     	Heap open_list = new Heap();
+    	boolean[][] closed_list = new boolean[rows][cols];
     	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
     	curr.setH_value(hType.getDistance(startPoint, goalPoint)*weight);
     	open_list.add(curr); 
-    	boolean[][] closed_list = new boolean[rows][cols];
     	
     	while(!open_list.isEmpty()){
     		curr = open_list.pop();
