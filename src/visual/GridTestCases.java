@@ -21,13 +21,16 @@ public class GridTestCases {
 		gList[4] = Utility.readFile("src/map5.txt");
 		
 		for(int i = 0; i < 5; i++){
-			System.out.println("FOR MAP"+ i+1 +" : Regular A*\n");
+			System.out.println("FOR MAP"+ (i+1) +" : Regular A*\n");
 			runTestsAvgForAllHeuristicsFor1GridRegularAStar(gList[i]);
 			System.out.println();
-			System.out.println("FOR MAP"+ i+1 +" : Weighted A*\n");
-			runTestsAvgForAllHeuristicsFor1GridWeightedAStar(gList[i]);
+			System.out.println("FOR MAP"+ (i+1) +" : Weighted A* = 1.5\n");
+			runTestsAvgForAllHeuristicsFor1GridWeightedAStar1_5(gList[i]);
 			System.out.println();
-			System.out.println("FOR MAP"+ i+1 +" : UniformCostSearch\n");
+			System.out.println("FOR MAP"+ (i+1) +" : Weighted A* = 3.0\n");
+			runTestsAvgForAllHeuristicsFor1GridWeightedAStar3_0(gList[i]);
+			System.out.println();
+			System.out.println("FOR MAP"+ (i+1) +" : UniformCostSearch\n");
 			runTestsAvgForUniformCostSeach(gList[i]);
 			System.out.println();
 		}
@@ -40,12 +43,14 @@ public class GridTestCases {
 
 	public static void runTestsAvgForAllHeuristicsFor1GridRegularAStar(Grid g){
 		double[] averages = new double[5];
-		for(int i = 0; i < 6; i++){
+		for(int i = 1; i < 6; i++){
 			System.out.println(HeuristicType.values()[i]);
 			double[] currAverages = g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.values()[i]));
 			for(int j = 0; j < 5; j++){
 				averages[j] += currAverages[j];
 			}
+			g.refresh();
+			System.out.println("Refresh complete");
 			System.out.println();
 		}
 		for(int k = 0; k < 5; k++){
@@ -54,14 +59,34 @@ public class GridTestCases {
 		}		
 	}
 	
-	public static void runTestsAvgForAllHeuristicsFor1GridWeightedAStar(Grid g){
+	public static void runTestsAvgForAllHeuristicsFor1GridWeightedAStar1_5(Grid g){
 		double[] averages = new double[5];
-		for(int i = 0; i < 6; i++){
+		for(int i = 1; i < 6; i++){
 			System.out.println(HeuristicType.values()[i]);
 			double[] currAverages = g.runAStar(new WeightedAStar(g.getGrid(), 1.5, HeuristicType.values()[i]));
 			for(int j = 0; j < 5; j++){
 				averages[j] += currAverages[j];
 			}
+			g.refresh();
+			System.out.println("Refresh complete");
+			System.out.println();
+		}
+		for(int k = 0; k < 5; k++){
+			averages[k] /= 5;
+			System.out.println(k+") "+averages[k]);
+		}		
+	}
+	
+	public static void runTestsAvgForAllHeuristicsFor1GridWeightedAStar3_0(Grid g){
+		double[] averages = new double[5];
+		for(int i = 1; i < 6; i++){
+			System.out.println(HeuristicType.values()[i]);
+			double[] currAverages = g.runAStar(new WeightedAStar(g.getGrid(), 3.0, HeuristicType.values()[i]));
+			for(int j = 0; j < 5; j++){
+				averages[j] += currAverages[j];
+			}
+			g.refresh();
+			System.out.println("Refresh complete");
 			System.out.println();
 		}
 		for(int k = 0; k < 5; k++){
