@@ -64,7 +64,19 @@ public class Grid extends JFrame{
     	setWindowProperties();
     }
     
+    public void refresh(){
+    	for(int i = 0; i < Grid.rows; i++){
+    		for(int j = 0; j < Grid.cols; j++){
+    			this.grid[i][j].getNode().setF_value(0.0);
+    			this.grid[i][j].getNode().setG_value(0.0);
+    			this.grid[i][j].getNode().setH_value(0.0);
+    			this.grid[i][j].getNode().parent = null;
+    		}
+    	}
+    }
+    
     public double[] runAStar(AStar astar){
+    	aStarSolution.clear();
     	double[] solutions = new double[5];
     	AStar ras = astar;
     	long startTime = System.currentTimeMillis();
@@ -81,7 +93,6 @@ public class Grid extends JFrame{
     	totalPathCost = nod.getG_value();
     	System.out.println(totalPathCost);
     	while(nod != null){
-    		//System.out.println(nod.getPoint());
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
     	}
