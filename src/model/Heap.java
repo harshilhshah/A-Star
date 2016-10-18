@@ -11,37 +11,21 @@ public class Heap {
 	}
 	
 	public double MinKey(){
-		return 0.0; // TODO: change this
+		return (list.isEmpty()) ? Integer.MAX_VALUE : list.get(0).getF_value();
 	}
 	
 	public Node Top(){
-		return null; // TODO
+		return (list.isEmpty()) ? null : list.get(0);
 	}
 	
 	public void add(Node n, double key){
-		//TODO
+		n.setF_value(key);
+		add(n);
 	}
 	
 	public void add(Node node){
 	list.add(node);
 	siftUp();
-		
-/*		Node curr = root;
-		while (curr != null){
-			if(curr.compareTo(node) == 1){
-				if(curr.left == null){
-					node = curr.left;
-					curr = null;
-				}
-			}else if(curr.compareTo(node) == -1){
-				if(curr.right == null){
-					node = curr.right;
-					curr = null;
-				}
-			}
-			list.contains(node);
-		}
-		*/
 	}
 	
 	private void siftUp(){
@@ -118,5 +102,9 @@ public class Heap {
 	
 	public boolean isEmpty(){
 		return list.size() == 0;
+	}
+	
+	public String toString(){
+		return list.toString();
 	}
 }

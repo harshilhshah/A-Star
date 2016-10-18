@@ -12,23 +12,24 @@ public abstract class AStar {
 	double weight;
 	double totalPathcost;
 	Box[][] grid;
-	Node[][] node_grid;
 	HeuristicType hType;
+	Heap open_list;
+	boolean[][] closed_list;
 	
 	AStar(Box[][] g){
 		if(g == null || g.length == 0) throw new NullPointerException();
 		grid = g;
-		rows = (short) g.length;
-		cols = (short) g[0].length;
+		this.rows = (short) g.length;
+		this.cols = (short) g[0].length;
+		open_list = new Heap();
+		closed_list = new boolean[rows][cols];
 	}
 	
 	
     public Node runAStar(Point startPoint, Point goalPoint){
     	Node aStarNodeSolution = null;
-    	Heap open_list = new Heap();
-    	boolean[][] closed_list = new boolean[rows][cols];
     	Node curr = grid[startPoint.getY()][startPoint.getX()].getNode();
-    	curr.setH_value(hType.getDistance(startPoint, goalPoint)*weight);
+    	curr.setH_value(hType.getDistance(grid,startPoint, goalPoint)*weight);
     	open_list.add(curr); 
     	
     	while(!open_list.isEmpty()){
@@ -54,13 +55,16 @@ public abstract class AStar {
     			}
     			else{
     				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
-    				sPrime.setH_value(hType.getDistance(sPrime.getPoint(), goalPoint)*weight);
+    				sPrime.setH_value(hType.getDistance(grid,sPrime.getPoint(), goalPoint)*weight);
     				if(!open_list.contains(sPrime)){
     					sPrime.setF_value(Integer.MAX_VALUE); 
     					sPrime.parent = null;
     				}
     				double cost = Utility.getCost(grid[curr.getPoint().getY()][curr.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); 
-    				updateVertex(curr, sPrime, cost, open_list);
+    				if(hType == HeuristicType.AVOIDH2T){
+    					sPrime.setH_value(hType.getHD(grid, curr.getPoint(), sPrime.getPoint())*weight);
+    				}
+    				updateVertex(curr, sPrime, cost);
     			}
     		}		
     	}
@@ -70,7 +74,7 @@ public abstract class AStar {
     	return aStarNodeSolution;
     }
 	
-	public void updateVertex(Node s, Node sPrime, double cost, Heap open_list){
+	public void updateVertex(Node s, Node sPrime, double cost){
     	if(s.getF_value() + cost + sPrime.getH_value() < sPrime.getF_value()){
     		sPrime.setG_value(s.getG_value() + cost);
     		sPrime.setF_value(sPrime.getG_value() + sPrime.getH_value());
@@ -81,6 +85,8 @@ public abstract class AStar {
     		open_list.add(sPrime);
     	}
 	}
+	
+	
 	
 }
 

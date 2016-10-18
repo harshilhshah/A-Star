@@ -34,7 +34,7 @@ public class Grid extends JFrame{
 	private Box[][] grid;
 	private Point startPoint;
 	private Point goalPoint;
-	private double totalPathCost;
+	private double totalPathCost = 0;
 	private ArrayList<Point> aStarSolution = new ArrayList<Point>();
 	private Point[] difficultTerrain = new Point[8];
 	
@@ -74,10 +74,14 @@ public class Grid extends JFrame{
     	Runtime runtime = Runtime.getRuntime();
     	runtime.gc();
     	double memory = runtime.totalMemory() - runtime.freeMemory();
-    	if(nod == null)
+    	if(nod == null){
     		HomeScreen.display("No path found");
+    		return solutions;
+    	}
     	totalPathCost = nod.getG_value();
+    	System.out.println(totalPathCost);
     	while(nod != null){
+    		//System.out.println(nod.getPoint());
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
     	}

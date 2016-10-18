@@ -12,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import model.HeuristicType;
+import model.IntegratedAStar;
 import model.RegularAStar;
+import model.SequentialAStar;
 import model.UniformCostSearch;
 import model.WeightedAStar;
 import controller.Utility;
@@ -21,14 +23,14 @@ public class HomeScreen extends Applet implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
-	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, waStarBtn, uaStarBtn, exitBtn, genNewStrtGoal;
+	Button newMapBtn, readMapBtn, writeMapBtn, writePathBtn, aStarBtn, waStarBtn, uaStarBtn, saStarBtn, iaStarBtn, exitBtn, genNewStrtGoal;
 	static JLabel lbl = new JLabel("");
 	Grid g;
 
 	public void init() {
 		
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.resize(400, 200);
+		this.resize(400, 400);
 		
 		newMapBtn = new Button("Create new map");
 		add(newMapBtn);		
@@ -49,6 +51,14 @@ public class HomeScreen extends Applet implements ActionListener {
 		waStarBtn = new Button("Execute weighted A*");
 		add(waStarBtn);
 		waStarBtn.addActionListener(this);
+		
+		saStarBtn = new Button("Sequential A*");
+		add(saStarBtn);
+		saStarBtn.addActionListener(this);
+		
+		iaStarBtn = new Button("Integrated A*");
+		add(iaStarBtn);
+		iaStarBtn.addActionListener(this);
 		
 		genNewStrtGoal = new Button("Generate new Stand,Goal points");
 		add(genNewStrtGoal);
@@ -111,19 +121,19 @@ public class HomeScreen extends Applet implements ActionListener {
 			else{
 				display("Loading...");
 				double[] averages = new double[5];
-				for(int i = 0; i < 6; i++){
-					System.out.println(HeuristicType.values()[i]);
-					double[] currAverages = g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.values()[i]));
-					for(int j = 0; j < 5; j++){
-						averages[j] += currAverages[j];
-					}
-					System.out.println();
-				}
-				for(int k = 0; k < 5; k++){
-					averages[k] /= 5;
-					System.out.println(k+") "+averages[k]);
-				}
-//				g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.EUCLIDEAN));
+//				for(int i = 0; i < 6; i++){
+	//				System.out.println(HeuristicType.values()[i]);
+	//				double[] currAverages = g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.values()[i]));
+	//				for(int j = 0; j < 5; j++){
+	//					averages[j] += currAverages[j];
+	//				}
+	//				System.out.println();
+	//			}
+	//			for(int k = 0; k < 5; k++){
+	//				averages[k] /= 5;
+	//				System.out.println(k+") "+averages[k]);
+	//			}
+				g.runAStar(new RegularAStar(g.getGrid(), HeuristicType.AVOIDH2T));
 			}
 		}
 		else if(e.getSource() == waStarBtn){
@@ -157,8 +167,25 @@ public class HomeScreen extends Applet implements ActionListener {
 				g.runAStar(new UniformCostSearch(g.getGrid()));
 			}
 		}
-		else 
-			if(e.getSource() == genNewStrtGoal){
+		else if(e.getSource() == saStarBtn){
+			if(g == null){
+				displayError("Can't find a map to traverse.");
+			}
+			else{
+				display("Loading...");
+				g.runAStar(new SequentialAStar(g.getGrid(),1.25,2));
+			}
+		}
+		else if(e.getSource() == iaStarBtn){
+			if(g == null){
+				displayError("Can't find a map to traverse.");
+			}
+			else{
+				display("Loading...");
+				g.runAStar(new IntegratedAStar(g.getGrid(),1.25,2));
+			}
+		}
+		else if(e.getSource() == genNewStrtGoal){
 			if(g == null){
 				displayError("Can't generate new Start and Goal points");
 			}

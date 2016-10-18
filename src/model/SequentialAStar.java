@@ -5,62 +5,61 @@ import visual.Box;
 
 public class SequentialAStar extends AStar {
 	
-	private Box[][][] grids;
 	private double w1;
 	private double w2;
-	private Heap[] open_lists;
-	private boolean[][][] closed_lists;
+	private AStar[] searches;
 
-	public SequentialAStar(Box[][] grid) {
+	public SequentialAStar(Box[][] grid, double weight1, double weight2) {
 		super(grid);
+		w1 = weight1;
+		w2 = weight2;
 	}
 	
 	@Override
 	public Node runAStar(Point startPoint, Point goalPoint){
 		
-		int n = 3; // Not sure how to set this
-		open_lists = new Heap[n];
-		grids = new Box[n][][];
-		closed_lists = new boolean[n][rows][cols];
+		int n = 5;
+		searches = new AStar[n];
+		searches[0] = new RegularAStar(grid.clone(), HeuristicType.EUCLIDEAN);
+		searches[1] = new RegularAStar(grid.clone(), HeuristicType.MANHATTAN);
+		searches[2] = new RegularAStar(grid.clone(), HeuristicType.BORDERPOINT);
+		searches[3] = new RegularAStar(grid.clone(), HeuristicType.CENTER);
+		searches[4] = new RegularAStar(grid.clone(), HeuristicType.AVOIDH2T);
 		
 		for(int i = 0; i < n; i++){
-			open_lists[i] = new Heap();
-			grids[i] = grid.clone();
-			grids[i][goalPoint.getY()][goalPoint.getX()].getNode().setG_value(Integer.MAX_VALUE);
-			double k = key(startPoint,i); // need to pass this key
-			open_lists[i].add(Utility.pointToNode(grids[i], startPoint),k);
+			searches[i].grid[goalPoint.getY()][goalPoint.getX()].getNode().setG_value(Integer.MAX_VALUE);
+			double k = key(startPoint,i); 
+			searches[i].open_list.add(Utility.pointToNode(searches[i].grid, startPoint),k);
 		}
 		
-		while(open_lists[0].MinKey() < Integer.MAX_VALUE){
+		while(searches[0].open_list.MinKey() < Integer.MAX_VALUE){
 			for(int i = 1; i < n; i++){
-				if(open_lists[i].MinKey() <= w2 * open_lists[0].MinKey()){
-					if(grids[i][goalPoint.getY()][goalPoint.getX()].getNode().getG_value() <= open_lists[0].MinKey()){
-						if(grids[i][goalPoint.getY()][goalPoint.getX()].getNode().getG_value() <= Integer.MAX_VALUE){
-							// return path pointed by bpi(sgoal);
-							break;
+				if(searches[i].open_list.MinKey() <= w2 * searches[0].open_list.MinKey()){
+					if(searches[i].grid[goalPoint.getY()][goalPoint.getX()].getNode().getG_value() <= searches[0].open_list.MinKey()){
+						if(searches[i].grid[goalPoint.getY()][goalPoint.getX()].getNode().getG_value() < Integer.MAX_VALUE){
+							return searches[i].grid[goalPoint.getY()][goalPoint.getX()].getNode().parent;
 						}
 					}
 					else{
-						Node s = open_lists[i].Top();
+						Node s = searches[i].open_list.Top();
 						ExpandState(s,i);
 						int cx = s.getPoint().getX();
 			    		int cy = s.getPoint().getY();
-			    		closed_lists[i][cy][cx] = true; 
+			    		searches[i].closed_list[cy][cx] = true; 
 					}
 				}
 				else{
-					if(grids[0][goalPoint.getY()][goalPoint.getX()].getNode().getG_value() <= open_lists[0].MinKey()){
-						if(grids[0][goalPoint.getY()][goalPoint.getX()].getNode().getG_value() <= Integer.MAX_VALUE){
-							// return path pointed by bp0(sgoal);
-							break;
+					if(searches[0].grid[goalPoint.getY()][goalPoint.getX()].getNode().getG_value() <= searches[0].open_list.MinKey()){
+						if(searches[0].grid[goalPoint.getY()][goalPoint.getX()].getNode().getG_value() < Integer.MAX_VALUE){
+							return searches[0].grid[goalPoint.getY()][goalPoint.getX()].getNode().parent;
 						}
 					}
 					else{
-						Node s = open_lists[0].Top();
+						Node s = searches[0].open_list.Top();
 						ExpandState(s,0);
 						int cx = s.getPoint().getX();
 			    		int cy = s.getPoint().getY();
-			    		closed_lists[0][cy][cx] = true;
+			    		searches[0].closed_list[cy][cx] = true;
 					}
 				}
 			}
@@ -70,7 +69,7 @@ public class SequentialAStar extends AStar {
 	}
 	
 	private void ExpandState(Node s, int i){
-		open_lists[i].remove(s);
+		searches[i].open_list.remove(s);
 		int cx = s.getPoint().getX();
 		int cy = s.getPoint().getY();
 		for(Neighbor n: Neighbor.neighnbors){
@@ -80,22 +79,22 @@ public class SequentialAStar extends AStar {
 			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL){ /*checking for blocked cells*/
 				continue;
 			}
-			else if(closed_lists[i][cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
+			else if(searches[i].closed_list[cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
 				continue;
 			}
 			else{
 				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
-				if(!open_lists[i].contains(sPrime)){
+				if(!searches[i].open_list.contains(sPrime)){
 					sPrime.setF_value(Integer.MAX_VALUE); 
 					sPrime.parent = null;
 				}
 				double cost = Utility.getCost(grid[s.getPoint().getY()][s.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); 
-				updateVertex(s, sPrime, cost, open_lists[i]);
+				searches[i].updateVertex(s, sPrime, cost);
 			}
 		}	
 	}
 	
 	private double key(Point s, int i){
-		return grids[i][s.getY()][s.getX()].getNode().getG_value() + (w1 * grids[i][s.getY()][s.getX()].getNode().getH_value());
+		return searches[i].grid[s.getY()][s.getX()].getNode().getG_value() + (w1 * searches[i].grid[s.getY()][s.getX()].getNode().getH_value());
 	}
 }
