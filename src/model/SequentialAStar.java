@@ -46,6 +46,7 @@ public class SequentialAStar extends AStar {
 						int cx = s.getPoint().getX();
 			    		int cy = s.getPoint().getY();
 			    		searches[i].closed_list[cy][cx] = true; 
+			    		numNodesExpanded++;
 					}
 				}
 				else{
@@ -60,6 +61,7 @@ public class SequentialAStar extends AStar {
 						int cx = s.getPoint().getX();
 			    		int cy = s.getPoint().getY();
 			    		searches[0].closed_list[cy][cx] = true;
+			    		numNodesExpanded++;
 					}
 				}
 			}

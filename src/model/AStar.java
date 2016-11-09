@@ -57,6 +57,7 @@ public abstract class AStar {
     				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
     				sPrime.setH_value(hType.getDistance(grid,sPrime.getPoint(), goalPoint)*weight);
     				if(!open_list.contains(sPrime)){
+    					sPrime.setG_value(Integer.MAX_VALUE); 
     					sPrime.setF_value(Integer.MAX_VALUE); 
     					sPrime.parent = null;
     				}
@@ -75,7 +76,7 @@ public abstract class AStar {
     }
 	
 	public void updateVertex(Node s, Node sPrime, double cost){
-    	if(s.getF_value() + cost + sPrime.getH_value() < sPrime.getF_value()){
+    	if(s.getG_value() + cost + sPrime.getH_value() < sPrime.getG_value()){
     		sPrime.setG_value(s.getG_value() + cost);
     		sPrime.setF_value(sPrime.getG_value() + sPrime.getH_value());
     		sPrime.parent = s;

@@ -52,6 +52,7 @@ public class IntegratedAStar extends AStar{
 						int cx = s.getPoint().getX();
 			    		int cy = s.getPoint().getY();
 			    		closed_list[1][cy][cx] = true; 
+			    		numNodesExpanded++;
 					}
 				}
 				else{
@@ -66,6 +67,7 @@ public class IntegratedAStar extends AStar{
 						int cx = s.getPoint().getX();
 			    		int cy = s.getPoint().getY();
 			    		closed_list[0][cy][cx] = true;
+			    		numNodesExpanded++;
 					}
 				}
 			}
@@ -75,7 +77,7 @@ public class IntegratedAStar extends AStar{
 	}
 	
 	private void ExpandState(Node s){
-		System.out.println(searches[0].open_list.getSize());
+		
 		for(int i = 0; i < num; i++){
 			searches[i].open_list.remove(s);
 		}
@@ -120,7 +122,11 @@ public class IntegratedAStar extends AStar{
 					for(int i = 1; i < num; i++){
 						if(key(sPrime.getPoint(),i) <= w2 * key(sPrime.getPoint(),0)){
 							sPrime.setH_value(searches[i].hType.getDistance(grid,sPrime.getPoint(), goalPoint)*weight);
-							searches[i].updateVertex(s,sPrime,cost);
+							//searches[i].updateVertex(s,sPrime,cost);
+							if(searches[i].open_list.contains(sPrime)){
+								searches[i].open_list.remove(sPrime);
+							}
+							searches[i].open_list.add(sPrime,key(sPrime.getPoint(),i));
 						}
 					}
 				}

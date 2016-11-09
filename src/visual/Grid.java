@@ -77,6 +77,13 @@ public class Grid extends JFrame{
     
     public double[] runAStar(AStar astar){
     	aStarSolution.clear();
+    	for(Box[] bArr: grid){
+    		for(Box b: bArr){
+    			b.getNode().parent = null;
+    			b.getNode().setH_value(0);
+    			b.getNode().setF_value(0);
+    		}
+    	}
     	double[] solutions = new double[5];
     	AStar ras = astar;
     	long startTime = System.currentTimeMillis();
@@ -91,7 +98,7 @@ public class Grid extends JFrame{
     		return solutions;
     	}
     	totalPathCost = nod.getG_value();
-    	System.out.println(totalPathCost);
+
     	while(nod != null){
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
@@ -247,7 +254,6 @@ public class Grid extends JFrame{
     		restart = true;
     		done = false;
     	}
-    	//System.out.println("Leaving highways");
     	for(int j = 0; j < overallVisitedPoints.size(); j++){
     		Point current = overallVisitedPoints.get(j);
     		if(grid[current.getY()][current.getX()].getTerrain() == Terrain.PARTIALLY_BLOCKED_CELL)
@@ -255,8 +261,6 @@ public class Grid extends JFrame{
     		else 
     			grid[current.getY()][current.getX()].setTerrain(Terrain.UNBLOCKED_HIGHWAY_CELL);
     	}
-    	//System.out.println("overall:"+overallVisitedPoints.toString());
-    	//System.out.println("Starting:"+startingPoints.toString());
     }
     
     public void generateBlockedCells(){

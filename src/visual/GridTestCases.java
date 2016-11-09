@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import controller.Utility;
 import model.HeuristicType;
+import model.IntegratedAStar;
 import model.RegularAStar;
+import model.SequentialAStar;
 import model.UniformCostSearch;
 import model.WeightedAStar;
 
@@ -32,6 +34,10 @@ public class GridTestCases {
 			System.out.println();
 			System.out.println("FOR MAP"+ (i+1) +" : UniformCostSearch\n");
 			runTestsAvgForUniformCostSeach(gList[i]);
+			System.out.println("FOR MAP"+ (i+1) +" : Sequential A*\n");
+			runTestsAvgForAllHeuristicsFor1GridSequentialAStar3_0(gList[i]);
+			System.out.println("FOR MAP"+ (i+1) +" : Integrated A*\n");
+			runTestsAvgForAllHeuristicsFor1GridIntegratedAStar3_0(gList[i]);
 			System.out.println();
 		}
 		
@@ -93,6 +99,32 @@ public class GridTestCases {
 			averages[k] /= 5;
 			System.out.println(k+") "+averages[k]);
 		}		
+	}
+	
+	public static void runTestsAvgForAllHeuristicsFor1GridSequentialAStar3_0(Grid g){
+		System.out.println("w1 = 1.25 and w2 = 2");
+		g.runAStar(new SequentialAStar(g.getGrid(), 1.25, 2.0));
+		g.refresh();
+		System.out.println("Refresh complete");
+		System.out.println();	
+		System.out.println("w1 = 1 and w2 = 8");
+		g.runAStar(new SequentialAStar(g.getGrid(), 1, 8));
+		g.refresh();
+		System.out.println("Refresh complete");
+		System.out.println("---------------");	
+	}
+	
+	public static void runTestsAvgForAllHeuristicsFor1GridIntegratedAStar3_0(Grid g){
+		System.out.println("w1 = 1.25 and w2 = 2");
+		g.runAStar(new IntegratedAStar(g.getGrid(), 1.25, 2.0));
+		g.refresh();
+		System.out.println("Refresh complete");
+		System.out.println();	
+		System.out.println("w1 = 1 and w2 = 8");
+		g.runAStar(new IntegratedAStar(g.getGrid(), 1, 8));
+		g.refresh();
+		System.out.println("Refresh complete");
+		System.out.println("---------------");
 	}
 	
 	public static void runTestsAvgForUniformCostSeach(Grid g){
