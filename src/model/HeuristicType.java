@@ -16,9 +16,9 @@ public enum HeuristicType{
 	public double getDistance(Box[][] grid, Point p1, Point p2){
 		switch(i){
 			case 0:
-				return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(),2));
+				return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(),2)) * 0.249;
 			case 1:
-				return (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY())) * 1.0 * 0.25;
+				return (Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY())) * 1.0;
 			case 2:
 				Point gravitateTo = null;
 				if(p2.getX() < Grid.cols/2 && p2.getY() < Grid.rows/2){ //top left

@@ -100,6 +100,7 @@ public class Grid extends JFrame{
     	totalPathCost = nod.getG_value();
 
     	while(nod != null){
+    		//System.out.println(nod.getPoint());
     		aStarSolution.add(nod.getPoint());
     		nod = nod.parent;
     	}

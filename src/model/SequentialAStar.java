@@ -8,6 +8,7 @@ public class SequentialAStar extends AStar {
 	private double w1;
 	private double w2;
 	private AStar[] searches;
+	private Point gp;
 
 	public SequentialAStar(Box[][] grid, double weight1, double weight2) {
 		super(grid);
@@ -17,6 +18,8 @@ public class SequentialAStar extends AStar {
 	
 	@Override
 	public Node runAStar(Point startPoint, Point goalPoint){
+		
+		gp = goalPoint;
 		
 		int n = 5;
 		searches = new AStar[n];
@@ -81,22 +84,33 @@ public class SequentialAStar extends AStar {
 			else if(grid[cy+n.getYChange()][cx+n.getXChange()].getTerrain() == Terrain.BLOCKED_CELL){ /*checking for blocked cells*/
 				continue;
 			}
-			else if(searches[i].closed_list[cy+n.getYChange()][cx+n.getXChange()]){ /*checking if already visited this point before*/
-				continue;
-			}
 			else{
 				Node sPrime = grid[cy+n.getYChange()][cx+n.getXChange()].getNode();
 				if(!searches[i].open_list.contains(sPrime)){
-					sPrime.setF_value(Integer.MAX_VALUE); 
+					sPrime.setG_value(Integer.MAX_VALUE); 
 					sPrime.parent = null;
 				}
 				double cost = Utility.getCost(grid[s.getPoint().getY()][s.getPoint().getX()], grid[sPrime.getPoint().getY()][sPrime.getPoint().getX()], n.isDiagonal()); 
-				searches[i].updateVertex(s, sPrime, cost);
+				updateVertex(i, s, sPrime, cost);
 			}
 		}	
 	}
 	
+	public void updateVertex(int i, Node s, Node sPrime, double cost){
+    	if(s.getG_value() + cost < sPrime.getG_value()){
+    		sPrime.setG_value(s.getG_value() + cost);
+    		sPrime.parent = s;
+    		if(!searches[i].closed_list[sPrime.getPoint().getY()][sPrime.getPoint().getX()]){ 
+    			if(searches[i].open_list.contains(sPrime)){
+    				searches[i].open_list.remove(sPrime);
+        		}
+    			searches[i].open_list.add(sPrime,key(sPrime.getPoint(),i));
+			}
+    	}
+	}
+	
+	
 	private double key(Point s, int i){
-		return searches[i].grid[s.getY()][s.getX()].getNode().getG_value() + (w1 * searches[i].grid[s.getY()][s.getX()].getNode().getH_value());
+		return searches[i].grid[s.getY()][s.getX()].getNode().getG_value() + (w1 * searches[i].hType.getDistance(searches[i].grid,s, gp)*searches[i].weight);
 	}
 }
